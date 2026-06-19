@@ -225,3 +225,7 @@
 * プログラミングスクールや個人開発での実績・ナレッジが多くトラブル対応がしやすい
 
 ---
+
+## 画面遷移図
+Figma : https://www.figma.com/board/32s0TYmj2nhHVSXDmgpFtR/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C%EF%BC%88%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3%EF%BC%89?node-id=0-1&t=4bEZtrAkKXb5aNct-1
+
