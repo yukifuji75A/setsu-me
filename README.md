@@ -228,4 +228,7 @@
 ---
 
 ## 画面遷移図
-Figma : https://www.figma.com/design/tWgf8ljRLd07VTkzFBV2EI/%E7%84%A1%E9%A1%8C?node-id=0-1&t=bJvMrqbKqCGqYQyc-1
+https://www.figma.com/design/tWgf8ljRLd07VTkzFBV2EI/%E7%84%A1%E9%A1%8C?node-id=0-1&t=bJvMrqbKqCGqYQyc-1
+
+## ER図
+https://www.figma.com/design/2DebfeGwtHpmK59kxO7CS1/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C%EF%BC%88ER%E5%9B%B3%EF%BC%89?node-id=0-1&t=3KuyGMIv6kKVe84Z-1
