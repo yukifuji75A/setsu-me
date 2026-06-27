@@ -100,10 +100,10 @@
 * **トリセツ作成画面（デフォルト）:** 共通の基本情報に加え、詳細な追加情報を入力。
 * **AIトリセツ文章生成:** 入力データを元に、AIが「取扱説明書風の解説文」を自動生成して保存。
 
-#### 3. マイページ
+#### 3. マイページ(タブ切り替え機能)
 * **画面内タブ切り替え:** ページ遷移をせず、その場のタブクリックで「基本情報」「AI分析文章」を切り替え可能。
 
-#### 4. トリセツ管理画面
+#### 4. トリセツ管理(プレビュー表示機能)
 * **プレビュー表示:** 作成して保存したトリセツのプレビューを表示。
 
 ---
@@ -228,4 +228,7 @@
 ---
 
 ## 画面遷移図
-Figma : https://www.figma.com/design/tWgf8ljRLd07VTkzFBV2EI/%E7%84%A1%E9%A1%8C?node-id=0-1&t=bJvMrqbKqCGqYQyc-1
+https://www.figma.com/design/tWgf8ljRLd07VTkzFBV2EI/%E7%84%A1%E9%A1%8C?node-id=0-1&t=bJvMrqbKqCGqYQyc-1
+
+## ER図
+https://www.figma.com/design/2DebfeGwtHpmK59kxO7CS1/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C%EF%BC%88ER%E5%9B%B3%EF%BC%89?node-id=0-1&t=3KuyGMIv6kKVe84Z-1
