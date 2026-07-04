@@ -321,7 +321,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   sprockets-rails
   stimulus-rails
-  tailwindcss-rails (~> 3.3.1)
+  tailwindcss-rails
   turbo-rails
   tzinfo-data
   web-console
