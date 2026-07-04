@@ -181,7 +181,7 @@
 | カテゴリ | 技術 | 用途 |
 |----------|------|------|
 | バックエンド | Ruby on Rails 7.2.X | サーバーサイド開発、API連携、CRUD処理 |
-| フロントエンド | Tailwind CSS + DaisyUI / JavaScript / Hotwire(Turbo + Stimulus)| UI構築、テーマに応じたコンポーネント・レイアウト制御、多ステップフォームの状態管理 |
+| フロントエンド | Tailwind CSS / JavaScript / Hotwire(Turbo + Stimulus)| UI構築、テーマに応じたコンポーネント・レイアウト制御、多ステップフォームの状態管理 |
 | DB | PostgreSQL | ユーザー情報・共通基本情報・テーマ別データの管理 |
 | 認証 | Devise + OmniAuth + omniauth-line | ユーザー登録・ログイン認証・LINE連携 |
 | AI | OpenAI API | テーマ別のトリセツ文章生成・マイページに表示する分析レポート生成 |
@@ -200,7 +200,7 @@
 * 開発速度が速く、全テーマ共通の基本情報とテーマ別の追加入力データを組み合わせる複雑なロジックを柔軟に実装できる
 * 卒業制作での採用実績が多く、情報が豊富
 
-#### フロントエンド：Tailwind CSS + DaisyUI / Hotwire（Turbo + Stimulus）
+#### フロントエンド：Tailwind CSS / Hotwire（Turbo + Stimulus）
 * 独自パーツの多い「トリセツ」の画面を、素早く構築する
 * 本リリース時のマルチテーマ機能（パーソナルブック、プロフカード、製品マニュアル）において、各テーマに応じたコンポーネントの構造的切り替えと、Tailwindの柔軟なスタイリングを組み合わせることで、破綻のないUI実装が可能になる
 * Hotwire（Turbo + Stimulus）を使用し、多ステップフォームの入力データをステップ進行のたびにDBへ保存することで、ページリロードやブラウザバックによるデータ消失を防ぐ
