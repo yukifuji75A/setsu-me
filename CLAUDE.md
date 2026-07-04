@@ -12,7 +12,7 @@
 |------|------|------|
 | バックエンド | Ruby on Rails | 7.2.x |
 | Ruby | Ruby | 3.3.8 |
-| フロントエンド | Tailwind CSS + DaisyUI / Hotwire (Turbo + Stimulus) | - |
+| フロントエンド | Tailwind CSS / Hotwire (Turbo + Stimulus) | - |
 | DB | PostgreSQL | 16 |
 | 認証 | Devise + OmniAuth (LINE連携は本リリース) | - |
 | AI | OpenAI API (gpt-4o-mini) | - |
