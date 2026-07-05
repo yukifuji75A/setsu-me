@@ -6,6 +6,6 @@ class Answer < ApplicationRecord
 
   # ========== バリデーション ==========
   validates :user_id, uniqueness: { scope: :question_id }
-  validates :body, presence:true, if: -> { question&.text? }
-  validates :question_option_id, presence: true, if: -> { question&.selection?}
+  validates :body, presence: true, if: -> { question&.text? }
+  validates :question_option_id, presence: true, if: -> { question&.selection? }
 end
