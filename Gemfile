@@ -20,6 +20,10 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 gem "devise"
+
+gem "ruby-openai"
+gem "dotenv-rails", groups: [:development, :test]
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
