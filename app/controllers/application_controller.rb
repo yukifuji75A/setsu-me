@@ -1,4 +1,13 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
+  before_action :authenticate_user!
+  before_action :require_profile
+
+  private
+
+  def require_profile
+    return unless user_signed_in?
+    return if controller_name == "profiles" || controller_name == "pages"
+    redirect_to new_profile_path unless current_user.profile.present?
+  end
 end

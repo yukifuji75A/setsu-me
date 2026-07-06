@@ -1,5 +1,5 @@
 class Question < ApplicationRecord
-  # ========== リレーション ==========
+  # ========== アソシエーション ==========
   has_many :question_options, -> { order(:position) }, dependent: :destroy
   has_many :answers
 
@@ -14,7 +14,7 @@ class Question < ApplicationRecord
   validates :position, presence: true
 
   # ========== スコープ ==========
-  scope for_manual, ->(theme) {
+  scope :for_manual, ->(theme) {
     where(theme: [ :common, theme ])
   }
 end
