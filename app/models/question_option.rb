@@ -1,5 +1,5 @@
 class QuestionOption < ApplicationRecord
-  # ========== リレーション ==========
+  # ========== アソシエーション ==========
   belongs_to :question
   has_many :answers
 

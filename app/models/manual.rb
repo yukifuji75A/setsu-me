@@ -1,5 +1,5 @@
 class Manual < ApplicationRecord
-  # ========== リレーション ==========
+  # ========== アソシエーション ==========
   belongs_to :user
   has_many :manual_ai_texts, dependent: :destroy
 

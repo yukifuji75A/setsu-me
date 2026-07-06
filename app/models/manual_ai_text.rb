@@ -1,5 +1,5 @@
 class ManualAiText < ApplicationRecord
-  # ========== リレーション ==========
+  # ========== アソシエーション ==========
   belongs_to :manual_ai_texts
 
   # ========== enum ==========

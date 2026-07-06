@@ -1,5 +1,5 @@
 class Profile < ApplicationRecord
-  # ========== リレーション ==========
+  # ========== アソシエーション ==========
   belongs_to :user
 
   enum :hometown, {
