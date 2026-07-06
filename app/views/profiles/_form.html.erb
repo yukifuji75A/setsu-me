@@ -1,0 +1,42 @@
+<%= form_with model: @profile, url: profile_path, local: true do |f| %>
+  <% if @profile.errors.any? %>
+    <div>
+      <% @profile.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, "表示名" %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :birthday, "生年月日" %>
+    <%= f.date_field :birthday %>
+  </div>
+
+  <div>
+    <%= f.label :hometown, "出身地" %>
+    <%= f.select :hometown,
+        Profile.hometowns.keys.map { |k| [t("enums.profile.hometown.#{k}"), k] },
+        { prompt: "選択してください" } %>
+  </div>
+
+  <div>
+    <%= f.label :education, "学歴" %>
+    <%= f.select :education,
+        Profile.educations.keys.map { |k| [t("enums.profile.education.#{k}"), k] },
+        { prompt: "選択してください" } %>
+  </div>
+
+  <div>
+    <%= f.label :blood_type, "血液型" %>
+    <%= f.select :blood_type,
+        Profile.blood_types.keys.map { |k| [t("enums.profile.blood_type.#{k}"), k] },
+        { prompt: "選択してください" } %>
+  </div>
+
+  <%= f.submit %>
+<% end %>
