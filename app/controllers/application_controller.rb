@@ -10,4 +10,12 @@ class ApplicationController < ActionController::Base
     return if controller_name == "profiles" || controller_name == "pages"
     redirect_to new_profile_path unless current_user.profile.present?
   end
+
+  def after_sign_up_path_for(resource)
+    new_profile_path
+  end
+
+  def after_sign_in_path_for(resource)
+    resource.profile.present? ? root_path : new_profile_path
+  end
 end
