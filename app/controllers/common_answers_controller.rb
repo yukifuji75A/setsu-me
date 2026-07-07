@@ -43,7 +43,7 @@ class CommonAnswersController < ApplicationController
 
   def answer_params
     params.fetch(:answers, {}).permit(
-      Question.common.ids.map { |id| [id.to_s, [ :question_option_id, :body ]] }.to_h
+      Question.common.ids.map { |id| [ id.to_s, [ :question_option_id, :body ] ] }.to_h
     )
   end
 end
