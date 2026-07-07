@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def require_profile
     return unless user_signed_in?
-    return if controller_name == "profiles" || controller_name == "pages"
+      return if controller_name == "profiles" || controller_name == "common_answers"
     redirect_to new_profile_path unless current_user.profile.present?
   end
 
@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    resource.profile.present? ? root_path : new_profile_path
+    resource.profile.present? ? mypage_path : new_profile_path
   end
 end
