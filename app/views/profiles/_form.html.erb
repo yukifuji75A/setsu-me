@@ -1,4 +1,4 @@
-<%= form_with model: @profile, url: profile_path, local: true do |f| %>
+<%= form_with model: @profile, url: profile_path, data: { turbo: false } do |f| %>
   <% if @profile.errors.any? %>
     <div>
       <% @profile.errors.full_messages.each do |msg| %>
@@ -38,5 +38,5 @@
         { prompt: "選択してください" } %>
   </div>
 
-  <%= f.submit %>
+  <%= f.submit "設定する", class: "w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 cursor-pointer" %>
 <% end %>

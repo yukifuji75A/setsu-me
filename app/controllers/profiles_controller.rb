@@ -6,7 +6,7 @@ class ProfilesController < ApplicationController
   def create
     @profile = current_user.build_profile(profile_params)
     if @profile.save
-      redirect_to root_path, notice: "プロフィールを設定しました"
+      redirect_to edit_common_answers_path, notice: "プロフィールを設定しました"
     else
       render :new, status: :unprocessable_entity
     end
