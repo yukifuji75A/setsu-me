@@ -186,7 +186,7 @@ end
   { position: 9,  title: "あまり突っ込んでほしくない「NGな話題」を教えてください" },
   { position: 10, title: "「これなら頼って！」と言える、あなたの得意なことを教えてください" },
   { position: 11, title: "あなたが苦手なことを教えてください" },
-  { position: 12, title: "上記以外で、一番知っておいてほしいことがあれば教えてください（任意）" }
+  { position: 12, title: "上記以外で、一番知っておいてほしいことを教えてください" }
 ].each do |attrs|
   Question.find_or_create_by!(theme: :default, position: attrs[:position]) do |q|
     q.title = attrs[:title]
