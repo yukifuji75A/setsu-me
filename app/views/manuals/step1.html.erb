@@ -1,0 +1,45 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-2">追加情報の入力</h1>
+  <p class="text-sm text-gray-500 mb-8">あなたの取扱い方法を教えてください。全12問です。</p>
+
+  <%= form_with url: step1_manuals_path, method: :post, data: { turbo: false } do |f| %>
+    <% if flash[:alert] %>
+      <div class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg text-sm">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <% @questions.each do |question| %>
+      <% answer = @answers[question.id] %>
+      <div class="mb-8">
+        <p class="font-medium mb-3">
+          Q<%= question.position %>. <%= question.title %>
+        </p>
+
+        <% if question.selection? %>
+          <div class="grid grid-cols-2 gap-2">
+            <% question.question_options.each do |option| %>
+              <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <%= radio_button_tag "answers[#{question.id}][question_option_id]",
+                    option.id,
+                    answer&.question_option_id == option.id,
+                    class: "accent-black" %>
+                <span class="text-sm"><%= option.label %></span>
+              </label>
+            <% end %>
+          </div>
+        <% else %>
+          <%= text_area_tag "answers[#{question.id}][body]",
+              answer&.body,
+              rows: 3,
+              placeholder: "入力してください",
+              class: "w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="mt-10">
+      <%= f.submit "次へ（AI生成へ）", class: "w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

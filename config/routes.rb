@@ -4,6 +4,17 @@ Rails.application.routes.draw do
   resource :common_answers, only: [ :edit, :update ], path: "common-answers"
   resource :mypage, only: [ :show ], controller: "mypage"
 
+  resources :manuals, only: [ :show ] do
+    collection do
+      get   :step1
+      post  :step1
+      get   :step2
+      post  :step2
+      get   :step3
+      post  :step3
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "mypage#show"
