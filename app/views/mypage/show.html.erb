@@ -1,5 +1,97 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6"><%= @profile.name %>のマイページ</h1>
+
+  <div data-controller="tabs">
+    <%# タブ %>
+    <div class="flex border-b mb-8">
+      <button
+        class="px-6 py-3 text-sm font-medium border-b-2 border-black"
+        data-tabs-target="tab"
+        data-tab-name="basic"
+        data-action="click->tabs#switch">
+        基本情報
+      </button>
+      <button
+        class="px-6 py-3 text-sm font-medium text-gray-400"
+        data-tabs-target="tab"
+        data-tab-name="ai"
+        data-action="click->tabs#switch">
+        AI分析
+      </button>
+    </div>
+
+    <%# 基本情報タブ %>
+    <div data-tabs-target="panel" data-tab-name="basic">
+      <section class="mb-8">
+        <h2 class="text-lg font-semibold mb-4">プロフィール</h2>
+        <dl class="space-y-3 text-sm">
+          <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">表示名</dt>
+            <dd><%= @profile.name %></dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">生年月日</dt>
+            <dd><%= @profile.birthday.strftime("%Y年%m月%d日") %>（<%= @profile.age %>歳・<%= @profile.zodiac_sign %>）</dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">出身地</dt>
+            <dd><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">学歴</dt>
+            <dd><%= t("enums.profile.education.#{@profile.education}") %></dd>
+          </div>
+          <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">血液型</dt>
+            <dd><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold">共通情報</h2>
+          <%= link_to "編集", edit_common_answers_path,
+              class: "text-sm text-gray-500 underline hover:text-black" %>
+        </div>
+
+        <% if @common_answers.any? %>
+          <dl class="space-y-4 text-sm">
+            <% @common_answers.each do |answer| %>
+              <div>
+                <dt class="text-gray-500 mb-1"><%= answer.question.title %></dt>
+                <dd>
+                  <% if answer.question.selection? %>
+                    <%= answer.question_option&.label %>
+                  <% else %>
+                    <%= answer.body %>
+                  <% end %>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        <% else %>
+          <p class="text-sm text-gray-400">まだ回答していません。</p>
+        <% end %>
+      </section>
+    </div>
+
+    <%# AI分析タブ %>
+    <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
+      <% if @manual %>
+        <p class="text-sm text-gray-500">トリセツはこちらのブランチで実装予定です。</p>
+      <% else %>
+        <div class="text-center py-16">
+          <p class="text-gray-500 mb-6">まだトリセツが作られていません。</p>
+          <%= link_to "トリセツを作る",
+              "#",
+              class: "inline-block bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
 <div>
-  <h1>マイページ</h1>
-  
   <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
 </div>
