@@ -61,6 +61,32 @@ ja:
       not_saved:
         one: "エラーが1件あるため保存できませんでした。"
         other: "エラーが%{count}件あるため保存できませんでした。"
+  activerecord:
+    errors:
+      messages:
+        blank: "を入力してください"
+        inclusion: "は一覧にありません"
+        too_short: "は%{count}文字以上で入力してください"
+        too_long: "は%{count}文字以下で入力してください"
+        taken: "はすでに使用されています"
+        invalid: "は正しい形式で入力してください"
+        confirmation: "が一致しません"
+    models:
+      user: "アカウント"
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
+      profile:
+        name: "表示名"
+        birthday: "生年月日"
+        hometown: "出身地"
+        education: "学歴"
+        blood_type: "血液型"
+      answer:
+        body: "回答"
+        question_option_id: "選択肢"
   enums:
     profile:
       hometown:

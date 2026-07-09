@@ -31,36 +31,8 @@ end
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
 
-# Q3: 思考タイプ
+# Q3: 大切なもの
 q = Question.find_or_create_by!(theme: :common, position: 3) do |question|
-  question.title = "あなたの思考タイプに最も近いものを選んでください"
-  question.answer_type = :selection
-end
-[
-  "ドライバー型（結果重視・合理的）",
-  "エクスプレッシブ型（直感重視・感情豊か）",
-  "エミアブル型（協調重視・人情派）",
-  "アナリティカル型（分析重視・慎重派）"
-].each_with_index do |label, i|
-  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
-end
-
-# Q4: 行動タイプ
-q = Question.find_or_create_by!(theme: :common, position: 4) do |question|
-  question.title = "あなたの行動タイプに最も近いものを選んでください"
-  question.answer_type = :selection
-end
-[
-  "D（主導型）直接的、成果思考、断固とした、意志が強い、強引",
-  "i（感化型）外向的、熱意のある、楽観的、活気がある、活発",
-  "S（安定型）平静、順応的、忍耐強い、謙虚、そつがない",
-  "C（慎重型）分析的、感情を表に出さない、緻密、人前に出たがらない、系統的"
-].each_with_index do |label, i|
-  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
-end
-
-# Q5: 大切なもの
-q = Question.find_or_create_by!(theme: :common, position: 5) do |question|
   question.title = "あなたにとって一番大切なものを選んでください"
   question.answer_type = :selection
 end
@@ -72,20 +44,20 @@ end
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
 
-# Q6: 趣味
-Question.find_or_create_by!(theme: :common, position: 6) do |question|
+# Q4: 趣味
+Question.find_or_create_by!(theme: :common, position: 4) do |question|
   question.title = "あなたの趣味を教えてください"
   question.answer_type = :text
 end
 
-# Q7: 好きなもの・こと
-Question.find_or_create_by!(theme: :common, position: 7) do |question|
+# Q5: 好きなもの・こと
+Question.find_or_create_by!(theme: :common, position: 5) do |question|
   question.title = "あなたが好きなもの・好きなことを教えてください"
   question.answer_type = :text
 end
 
-# Q8: 苦手なもの・こと
-Question.find_or_create_by!(theme: :common, position: 8) do |question|
+# Q6: 苦手なもの・こと
+Question.find_or_create_by!(theme: :common, position: 6) do |question|
   question.title = "あなたが苦手なもの・苦手なことを教えてください"
   question.answer_type = :text
 end
@@ -180,16 +152,44 @@ end
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
 
-# Q8〜Q12: 記述式
-[
-  { position: 8,  title: "一番盛り上がれる「好きな話題」を教えてください" },
-  { position: 9,  title: "あまり突っ込んでほしくない「NGな話題」を教えてください" },
-  { position: 10, title: "「これなら頼って！」と言える、あなたの得意なことを教えてください" },
-  { position: 11, title: "あなたが苦手なことを教えてください" },
-  { position: 12, title: "上記以外で、一番知っておいてほしいことを教えてください" }
-].each do |attrs|
-  Question.find_or_create_by!(theme: :default, position: attrs[:position]) do |q|
-    q.title = attrs[:title]
-    q.answer_type = :text
-  end
+# Q8: 好きな話題
+Question.find_or_create_by!(theme: :default, position: 8) do |question|
+  question.title = "一番盛り上がれる「好きな話題」を教えてください"
+  question.answer_type = :text
+end
+
+# Q9: 好調のサイン
+Question.find_or_create_by!(theme: :default, position: 9) do |question|
+  question.title = "好調のサインを教えてください"
+  question.answer_type = :text
+end
+
+# Q10: 不調のサイン
+Question.find_or_create_by!(theme: :default, position: 10) do |question|
+  question.title = "不調のサインを教えてください"
+  question.answer_type = :text
+end
+
+# Q11: 元気が出るもの・こと
+Question.find_or_create_by!(theme: :default, position: 11) do |question|
+  question.title = "元気が出るもの・ことを教えてください"
+  question.answer_type = :text
+end
+
+# Q12: ストレス発散方法
+Question.find_or_create_by!(theme: :default, position: 12) do |question|
+  question.title = "ストレス発散方法を教えてください"
+  question.answer_type = :text
+end
+
+# Q13: テンションが上がる瞬間
+Question.find_or_create_by!(theme: :default, position: 13) do |question|
+  question.title = "テンションが上がる瞬間を教えてください"
+  question.answer_type = :text
+end
+
+# Q14: 地雷
+Question.find_or_create_by!(theme: :default, position: 14) do |question|
+  question.title = "あなたの地雷を教えてください（例：絶対にやめてほしいこと、これだけはNG！なことなど）"
+  question.answer_type = :text
 end

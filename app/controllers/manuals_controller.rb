@@ -1,5 +1,10 @@
 class ManualsController < ApplicationController
   def step1
+    if current_user.answers.joins(:question).where(questions: { theme: :common }).empty?
+      redirect_to edit_common_answers_path, alert: "先に共通情報を入力してください"
+      return
+    end
+
     @questions = Question.default.order(:position).includes(:question_options)
     @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
 
