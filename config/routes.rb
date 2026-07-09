@@ -9,7 +9,6 @@ Rails.application.routes.draw do
       get   :step1
       post  :step1
       get   :step2
-      # post  :step2
       get   :step3
       post  :step3, action: :step3_save
     end

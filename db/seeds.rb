@@ -16,9 +16,9 @@ end
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
 
-# Q2: MBTI（任意）
+# Q2: MBTI
 q = Question.find_or_create_by!(theme: :common, position: 2) do |question|
-  question.title = "MBTIをご存じであれば教えてください（任意）"
+  question.title = "MBTIを教えてください"
   question.answer_type = :selection
 end
 [

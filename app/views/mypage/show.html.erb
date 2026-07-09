@@ -34,16 +34,16 @@
             <dd><%= @profile.birthday.strftime("%Y年%m月%d日") %>（<%= @profile.age %>歳・<%= @profile.zodiac_sign %>）</dd>
           </div>
           <div class="flex gap-4">
+            <dt class="w-24 text-gray-500">血液型</dt>
+            <dd><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+          </div>
+          <div class="flex gap-4">
             <dt class="w-24 text-gray-500">出身地</dt>
             <dd><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
           </div>
           <div class="flex gap-4">
             <dt class="w-24 text-gray-500">学歴</dt>
             <dd><%= t("enums.profile.education.#{@profile.education}") %></dd>
-          </div>
-          <div class="flex gap-4">
-            <dt class="w-24 text-gray-500">血液型</dt>
-            <dd><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
           </div>
         </dl>
       </section>
@@ -76,21 +76,33 @@
       </section>
     </div>
 
-    <%# AI分析タブ %>
-    <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
-      <% if @manual %>
-        <p class="text-sm text-gray-500">トリセツはこちらのブランチで実装予定です。</p>
-      <% else %>
-        <div class="text-center py-16">
-          <p class="text-gray-500 mb-6">まだトリセツが作られていません。</p>
-          <%= link_to "トリセツを作る",
-              step1_manuals_path,
-              class: "inline-block bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800" %>
+  <%# AI分析タブ %>
+  <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
+    <% if @manual %>
+      <section class="mb-8">
+        <h2 class="text-lg font-semibold mb-3">基本スペック</h2>
+        <div class="p-4 bg-gray-50 rounded-lg text-sm leading-relaxed">
+          <%= @manual.manual_ai_texts.find_by(section_type: :basic_spec)&.ai_text %>
         </div>
-      <% end %>
-    </div>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-lg font-semibold mb-3">取扱いガイド</h2>
+        <div class="p-4 bg-gray-50 rounded-lg text-sm leading-relaxed">
+          <%= @manual.manual_ai_texts.find_by(section_type: :handling_guide)&.ai_text %>
+        </div>
+      </section>
+
+      <%= link_to "トリセツを見る", manual_path(@manual),
+          class: "inline-block border border-black px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-50" %>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-gray-500 mb-6">まだトリセツが作られていません。</p>
+        <%= link_to "トリセツを作る", step1_manuals_path,
+            class: "inline-block bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800" %>
+      </div>
+    <% end %>
   </div>
-</div>
 
 <div>
   <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>

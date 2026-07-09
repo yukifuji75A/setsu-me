@@ -18,6 +18,13 @@
   </div>
 
   <div>
+    <%= f.label :blood_type, "血液型" %>
+    <%= f.select :blood_type,
+        Profile.blood_types.keys.map { |k| [t("enums.profile.blood_type.#{k}"), k] },
+        { prompt: "選択してください" } %>
+  </div>
+
+  <div>
     <%= f.label :hometown, "出身地" %>
     <%= f.select :hometown,
         Profile.hometowns.keys.map { |k| [t("enums.profile.hometown.#{k}"), k] },
@@ -28,13 +35,6 @@
     <%= f.label :education, "学歴" %>
     <%= f.select :education,
         Profile.educations.keys.map { |k| [t("enums.profile.education.#{k}"), k] },
-        { prompt: "選択してください" } %>
-  </div>
-
-  <div>
-    <%= f.label :blood_type, "血液型" %>
-    <%= f.select :blood_type,
-        Profile.blood_types.keys.map { |k| [t("enums.profile.blood_type.#{k}"), k] },
         { prompt: "選択してください" } %>
   </div>
 
