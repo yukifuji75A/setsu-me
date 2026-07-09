@@ -1,0 +1,27 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-2">最終確認</h1>
+  <p class="text-sm text-gray-500 mb-8">以下の内容でトリセツを発行します。</p>
+
+  <section class="mb-8">
+    <h2 class="text-lg font-semibold mb-3">基本スペック</h2>
+    <div class="p-4 bg-gray-50 rounded-lg text-sm leading-relaxed">
+      <%= @basic_spec %>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-lg font-semibold mb-3">取扱いガイド</h2>
+    <div class="p-4 bg-gray-50 rounded-lg text-sm leading-relaxed">
+      <%= @handling_guide %>
+    </div>
+  </section>
+
+  <%= form_with url: step3_manuals_path, method: :post, data: { turbo: false } do |f| %>
+    <div class="flex gap-4 mt-10">
+      <%= link_to "戻る", step2_manuals_path,
+          class: "flex-1 text-center border border-black py-3 rounded-lg font-medium hover:bg-gray-50" %>
+      <%= f.submit "トリセツを発行する",
+          class: "flex-1 bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

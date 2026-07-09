@@ -37,9 +37,40 @@ class ManualsController < ApplicationController
   end
 
   def step2
+    result = ManualGeneratorService.new(current_user).call
+    @basic_spec = result[:basic_spec]
+    @handling_guide = result[:handling_guide]
+    session[:basic_spec] = @basic_spec
+    session[:handling_guide] = @handling_guide
+  rescue StandardError
+    redirect_to step1_manuals_path, alert: "生成に失敗しました。もう一度お試しください。"
   end
 
   def step3
+    @basic_spec = session[:basic_spec]
+    @handling_guide = session[:handling_guide]
+  end
+
+  def step3_save
+    manual = current_user.manuals.find_or_initialize_by(theme: :default)
+    manual.save!
+
+    manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|
+      t.ai_text = session[:basic_spec]
+      t.save!
+    end
+
+    manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
+      t.ai_text = session[:handling_guide]
+      t.save!
+    end
+
+    session.delete(:basic_spec)
+    session.delete(:handling_guide)
+
+    redirect_to mypage_path, notice: "トリセツを発行しました！"
+  rescue StandardError
+    redirect_to step3_manuals_path, alert: "保存に失敗しました。もう一度お試しください。"
   end
 
   private

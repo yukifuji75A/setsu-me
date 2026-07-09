@@ -1,6 +1,6 @@
 class ManualAiText < ApplicationRecord
   # ========== アソシエーション ==========
-  belongs_to :manual_ai_texts
+  belongs_to :manual
 
   # ========== enum ==========
   enum :section_type, { basic_spec: 0, handling_guide: 1 }
