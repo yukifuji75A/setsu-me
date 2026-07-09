@@ -9,8 +9,12 @@
         <dd><%= @profile.name %></dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-24 text-gray-500">生年月日</dt>
-        <dd><%= @profile.birthday.strftime("%Y年%m月%d日") %>（<%= @profile.age %>歳・<%= @profile.zodiac_sign %>）</dd>
+        <dt class="w-24 text-gray-500">年齢</dt>
+        <dd><%= @profile.age %>歳</dd>
+      </div>
+      <div class="flex gap-4">
+        <dt class="w-24 text-gray-500">星座</dt>
+        <dd><%= @profile.zodiac_sign %></dd>
       </div>
       <div class="flex gap-4">
         <dt class="w-24 text-gray-500">血液型</dt>

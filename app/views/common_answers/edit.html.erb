@@ -1,6 +1,6 @@
 <div class="max-w-2xl mx-auto">
   <h1 class="text-2xl font-bold mb-2">共通情報の入力</h1>
-  <p class="text-sm text-gray-500 mb-8">あなたのことを教えてください。全8問です。</p>
+  <p class="text-sm text-gray-500 mb-8">あなたのことを教えてください。全6問です。</p>
 
   <%= form_with url: common_answers_path, method: :patch, data: { turbo: false } do |f| %>
     <% if flash[:alert] %>
