@@ -1,4 +1,5 @@
 class ManualsController < ApplicationController
+  layout "input", only: [ :step1, :step2, :step3 ]
   def step1
     if current_user.answers.joins(:question).where(questions: { theme: :common }).empty?
       redirect_to edit_common_answers_path, alert: "先に共通情報を入力してください"
