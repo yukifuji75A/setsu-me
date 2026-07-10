@@ -1,47 +1,61 @@
-<%# ダーク背景 %>
+<%# 白背景（inputレイアウト） %>
 
-<div class="pt-8 pb-4">
-  <h1 class="text-xl font-bold mb-1"><%= @profile.name %>のトリセツ</h1>
+<%# ヘッダー %>
+<div class="pt-8 pb-6">
+  <p class="text-xs text-gray-400 tracking-widest mb-1">取扱説明書 / デフォルト</p>
+  <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-purple to-accent-pink bg-clip-text text-transparent">
+    <%= @profile.name %>のトリセツ
+  </h1>
+  <div class="mt-3 h-px bg-gradient-to-r from-accent-purple to-accent-pink opacity-50"></div>
 </div>
 
 <div class="space-y-4 mb-8">
-  <div class="bg-dark-card rounded-2xl p-4">
-    <p class="text-xs text-dark-muted mb-3">プロフィール</p>
-    <dl class="space-y-2 text-sm">
+
+  <%# 第1章 %>
+  <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-violet-200">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第1章</span>
+      <span class="text-sm font-semibold ml-2 text-gray-900">製品仕様</span>
+    </div>
+    <dl class="space-y-2 text-sm p-4">
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">名前</dt>
-        <dd><%= @profile.name %></dd>
+        <dt class="w-20 text-gray-400">名前</dt>
+        <dd class="text-gray-900"><%= @profile.name %></dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">年齢</dt>
-        <dd><%= @profile.age %>歳</dd>
+        <dt class="w-20 text-gray-400">年齢</dt>
+        <dd class="text-gray-900"><%= @profile.age %>歳</dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">星座</dt>
-        <dd><%= @profile.zodiac_sign %></dd>
+        <dt class="w-20 text-gray-400">星座</dt>
+        <dd class="text-gray-900"><%= @profile.zodiac_sign %></dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">血液型</dt>
-        <dd><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+        <dt class="w-20 text-gray-400">血液型</dt>
+        <dd class="text-gray-900"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">出身地</dt>
-        <dd><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
+        <dt class="w-20 text-gray-400">出身地</dt>
+        <dd class="text-gray-900"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
       </div>
       <div class="flex gap-4">
-        <dt class="w-20 text-dark-muted">学歴</dt>
-        <dd><%= t("enums.profile.education.#{@profile.education}") %></dd>
+        <dt class="w-20 text-gray-400">学歴</dt>
+        <dd class="text-gray-900"><%= t("enums.profile.education.#{@profile.education}") %></dd>
       </div>
     </dl>
   </div>
 
-  <div class="bg-dark-card rounded-2xl p-4">
-    <p class="text-xs text-dark-muted mb-3">共通情報</p>
-    <dl class="space-y-3 text-sm">
+  <%# 第2章 %>
+  <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-violet-200">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第2章</span>
+      <span class="text-sm font-semibold ml-2 text-gray-900">基本データ</span>
+    </div>
+    <dl class="space-y-3 text-sm p-4">
       <% @common_answers.each do |answer| %>
         <div>
-          <dt class="text-dark-muted text-xs mb-0.5"><%= answer.question.title %></dt>
-          <dd>
+          <dt class="text-gray-400 text-xs mb-0.5"><%= answer.question.display_label %></dt>
+          <dd class="text-gray-900">
             <% if answer.question.selection? %>
               <%= answer.question_option&.label %>
             <% else %>
@@ -53,15 +67,24 @@
     </dl>
   </div>
 
-  <div class="bg-dark-card rounded-2xl p-4">
-    <p class="text-xs text-dark-muted mb-2">基本スペック</p>
-    <p class="text-sm leading-relaxed"><%= @basic_spec&.ai_text %></p>
+  <%# 第3章 %>
+  <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-violet-200">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第3章</span>
+      <span class="text-sm font-semibold ml-2 text-gray-900">基本スペック</span>
+    </div>
+    <p class="text-sm leading-relaxed p-4 text-gray-900"><%= @basic_spec&.ai_text %></p>
   </div>
 
-  <div class="bg-dark-card rounded-2xl p-4">
-    <p class="text-xs text-dark-muted mb-2">取扱いガイド</p>
-    <p class="text-sm leading-relaxed"><%= @handling_guide&.ai_text %></p>
+  <%# 第4章 %>
+  <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-violet-200">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第4章</span>
+      <span class="text-sm font-semibold ml-2 text-gray-900">取扱いガイド</span>
+    </div>
+    <p class="text-sm leading-relaxed p-4 text-gray-900"><%= @handling_guide&.ai_text %></p>
   </div>
+
 </div>
 
 <%= link_to "マイページへ", mypage_path,

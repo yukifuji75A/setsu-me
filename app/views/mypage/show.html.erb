@@ -57,8 +57,12 @@
           <span><%= @profile.name %></span>
         </div>
         <div class="flex gap-4">
-          <span class="w-20 text-dark-muted">生年月日</span>
-          <span><%= @profile.birthday.strftime("%Y年%m月%d日") %>（<%= @profile.age %>歳・<%= @profile.zodiac_sign %>）</span>
+          <span class="w-20 text-dark-muted">年齢</span>
+          <span><%= @profile.age %>歳</span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">星座</span>
+          <span><%= @profile.zodiac_sign %></span>
         </div>
         <div class="flex gap-4">
           <span class="w-20 text-dark-muted">血液型</span>
