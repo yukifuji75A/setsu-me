@@ -79,7 +79,7 @@ ja:
         password: "パスワード"
         password_confirmation: "パスワード（確認）"
       profile:
-        name: "表示名"
+        name: "名前"
         birthday: "生年月日"
         hometown: "出身地"
         education: "学歴"

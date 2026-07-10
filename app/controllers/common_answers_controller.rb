@@ -1,4 +1,5 @@
 class CommonAnswersController < ApplicationController
+  layout "input"
   def edit
     @questions = Question.common.order(:position).includes(:question_options)
     @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
