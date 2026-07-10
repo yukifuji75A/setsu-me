@@ -1,0 +1,145 @@
+<%# ダーク背景 %>
+
+<%# プロフィールヘッダー %>
+<div class="pt-8 pb-6">
+  <div class="flex items-center gap-4 mb-4">
+    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-accent-purple to-accent-pink flex items-center justify-center text-xl font-bold text-white flex-shrink-0">
+      <%= @profile.name.slice(0, 1) %>
+    </div>
+    <div class="flex-1 min-w-0">
+      <h1 class="text-lg font-bold truncate"><%= @profile.name %></h1>
+      <div class="flex flex-wrap gap-1.5 mt-1">
+        <% if (mbti_answer = @common_answers.find { |a| a.question.position == 2 && a.question.theme == "common" }) %>
+          <span class="text-xs bg-dark-card border border-dark-border rounded-full px-2 py-0.5 text-dark-muted">
+            <%= mbti_answer.question_option&.label&.split("（")&.first %>
+          </span>
+        <% end %>
+        <span class="text-xs bg-dark-card border border-dark-border rounded-full px-2 py-0.5 text-dark-muted">
+          <%= @profile.age %>歳
+        </span>
+        <span class="text-xs bg-dark-card border border-dark-border rounded-full px-2 py-0.5 text-dark-muted">
+          <%= t("enums.profile.education.#{@profile.education}") %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# タブ %>
+<div data-controller="tabs">
+  <div class="flex border-b border-dark-border mb-6">
+    <button
+      class="px-4 py-3 text-sm font-medium border-b-2 border-accent-purple text-white"
+      data-tabs-target="tab"
+      data-tab-name="basic"
+      data-action="click->tabs#switch">
+      基本情報
+    </button>
+    <button
+      class="px-4 py-3 text-sm font-medium text-dark-muted border-b-2 border-transparent"
+      data-tabs-target="tab"
+      data-tab-name="ai"
+      data-action="click->tabs#switch">
+      AI分析
+    </button>
+  </div>
+
+  <%# 基本情報タブ %>
+  <div data-tabs-target="panel" data-tab-name="basic">
+    <section class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs text-dark-muted uppercase tracking-wider">プロフィール</h2>
+        <%= link_to "編集", edit_profile_path, class: "text-xs text-accent-purple hover:underline" %>
+      </div>
+      <div class="bg-dark-card rounded-2xl p-4 space-y-3 text-sm">
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">名前</span>
+          <span><%= @profile.name %></span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">年齢</span>
+          <span><%= @profile.age %>歳</span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">星座</span>
+          <span><%= @profile.zodiac_sign %></span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">血液型</span>
+          <span><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">出身地</span>
+          <span><%= t("enums.profile.hometown.#{@profile.hometown}") %></span>
+        </div>
+        <div class="flex gap-4">
+          <span class="w-20 text-dark-muted">学歴</span>
+          <span><%= t("enums.profile.education.#{@profile.education}") %></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs text-dark-muted uppercase tracking-wider">共通情報</h2>
+        <%= link_to "編集", edit_common_answers_path,
+            class: "text-xs text-accent-purple hover:underline" %>
+      </div>
+
+      <% if @common_answers.any? %>
+        <div class="bg-dark-card rounded-2xl p-4 space-y-4 text-sm">
+          <% @common_answers.each do |answer| %>
+            <div>
+              <p class="text-dark-muted text-xs mb-1"><%= answer.question.title %></p>
+              <p>
+                <% if answer.question.selection? %>
+                  <%= answer.question_option&.label %>
+                <% else %>
+                  <%= answer.body %>
+                <% end %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="bg-dark-card rounded-2xl p-4 text-sm text-dark-muted text-center">
+          まだ回答していません。
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <%# AI分析タブ %>
+  <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
+    <% if @manual %>
+      <section class="mb-4">
+        <div class="bg-dark-card rounded-2xl p-4 mb-3">
+          <p class="text-xs text-dark-muted mb-2">基本スペック</p>
+          <p class="text-sm leading-relaxed">
+            <%= @manual.manual_ai_texts.find_by(section_type: :basic_spec)&.ai_text %>
+          </p>
+        </div>
+        <div class="bg-dark-card rounded-2xl p-4">
+          <p class="text-xs text-dark-muted mb-2">取扱いガイド</p>
+          <p class="text-sm leading-relaxed">
+            <%= @manual.manual_ai_texts.find_by(section_type: :handling_guide)&.ai_text %>
+          </p>
+        </div>
+      </section>
+
+      <%= link_to "トリセツを見る", manual_path(@manual),
+          class: "block w-full py-3 rounded-2xl text-sm font-bold text-center bg-gradient-to-r from-accent-purple to-accent-pink text-white hover:opacity-90 transition-opacity" %>
+    <% else %>
+      <div class="text-center py-12">
+        <p class="text-dark-muted text-sm mb-6">まだトリセツが作られていません。</p>
+        <%= link_to "トリセツを作る", step1_manuals_path,
+            class: "inline-block py-4 px-8 rounded-2xl font-bold text-white text-sm bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="mt-8 pt-6 border-t border-dark-border">
+  <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+      class: "w-full py-3 rounded-2xl text-sm font-bold text-white cursor-pointer bg-gradient-to-r from-purple-900 to-violet-800 hover:opacity-90 transition-opacity" %>
+</div>

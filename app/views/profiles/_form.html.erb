@@ -1,0 +1,51 @@
+<%= form_with model: @profile, url: profile_path, data: { turbo: false } do |f| %>
+  <% if @profile.errors.any? %>
+    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl">
+      <% @profile.errors.full_messages.each do |msg| %>
+        <p class="text-sm text-red-600"><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="space-y-4 mb-8">
+    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-1">名前</p>
+      <%= f.text_field :name,
+          placeholder: "例：藤原悠暉",
+          class: "w-full bg-transparent text-gray-900 placeholder-gray-300 text-sm outline-none" %>
+    </div>
+
+    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-1">生年月日</p>
+      <%= f.date_field :birthday,
+          class: "w-full bg-transparent text-gray-900 text-sm outline-none" %>
+    </div>
+
+    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-1">血液型</p>
+      <%= f.select :blood_type,
+          Profile.blood_types.keys.map { |k| [t("enums.profile.blood_type.#{k}"), k] },
+          { prompt: "選択してください" },
+          class: "w-full bg-transparent text-gray-900 text-sm outline-none" %>
+    </div>
+
+    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-1">出身地</p>
+      <%= f.select :hometown,
+          Profile.hometowns.keys.map { |k| [t("enums.profile.hometown.#{k}"), k] },
+          { prompt: "選択してください" },
+          class: "w-full bg-transparent text-gray-900 text-sm outline-none" %>
+    </div>
+
+    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-1">学歴</p>
+      <%= f.select :education,
+          Profile.educations.keys.map { |k| [t("enums.profile.education.#{k}"), k] },
+          { prompt: "選択してください" },
+          class: "w-full bg-transparent text-gray-900 text-sm outline-none" %>
+    </div>
+  </div>
+
+  <%= f.submit @profile.new_record? ? "設定する" : "更新する",
+      class: "w-full py-4 rounded-2xl font-bold text-white text-sm cursor-pointer bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity" %>
+<% end %>

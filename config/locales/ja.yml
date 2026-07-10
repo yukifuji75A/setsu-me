@@ -1,0 +1,152 @@
+ja:
+  devise:
+    confirmations:
+      confirmed: "メールアドレスを確認しました。"
+      send_instructions: "確認メールを送信しました。"
+      send_paranoid_instructions: "メールアドレスが登録済みの場合、確認メールを送信しました。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      inactive: "アカウントが有効化されていません。"
+      invalid: "メールアドレスまたはパスワードが違います。"
+      locked: "アカウントがロックされています。"
+      last_attempt: "もう一度失敗するとアカウントがロックされます。"
+      not_found_in_database: "メールアドレスまたはパスワードが違います。"
+      timeout: "セッションの有効期限が切れました。もう一度ログインしてください。"
+      unauthenticated: "ログインまたは新規登録してください。"
+      unconfirmed: "メールアドレスを確認してからログインしてください。"
+    mailer:
+      confirmation_instructions:
+        subject: "メールアドレスの確認"
+      reset_password_instructions:
+        subject: "パスワードの再設定"
+      unlock_instructions:
+        subject: "アカウントのロック解除"
+      email_changed:
+        subject: "メールアドレス変更のお知らせ"
+      password_change:
+        subject: "パスワード変更のお知らせ"
+    omniauth_callbacks:
+      failure: "%{kind} アカウントによる認証に失敗しました（%{reason}）。"
+      success: "%{kind} アカウントによる認証に成功しました。"
+    passwords:
+      no_token: "このページにはアクセスできません。パスワード再設定メールのリンクからアクセスしてください。"
+      send_instructions: "パスワードの再設定について数分以内にメールでご連絡いたします。"
+      send_paranoid_instructions: "メールアドレスが登録済みの場合、パスワード再設定のリンクをメールで送信しました。"
+      updated: "パスワードを変更しました。"
+      updated_not_active: "パスワードを変更しました。"
+    registrations:
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+      signed_up: "アカウント登録が完了しました。"
+      signed_up_but_inactive: "登録が完了しましたが、アカウントが有効化されていないためログインできません。"
+      signed_up_but_locked: "登録が完了しましたが、アカウントがロックされているためログインできません。"
+      signed_up_but_unconfirmed: "確認メールを送信しました。メール内のリンクからアカウントを有効化してください。"
+      update_needs_confirmation: "アカウント情報を更新しました。新しいメールアドレスの確認が必要です。"
+      updated: "アカウント情報を更新しました。"
+      updated_but_not_signed_in: "アカウント情報を更新しました。パスワードが変更されたため、再度ログインしてください。"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "ログアウトしました。"
+    unlocks:
+      send_instructions: "ロック解除の方法を数分以内にメールでご連絡いたします。"
+      send_paranoid_instructions: "アカウントが存在する場合、ロック解除の方法をメールで送信しました。"
+      unlocked: "アカウントのロックを解除しました。"
+  errors:
+    messages:
+      already_confirmed: "はすでに確認済みです。ログインしてください。"
+      confirmation_period_expired: "の確認期限が切れました。%{period}以内に確認してください。"
+      expired: "の有効期限が切れました。再度お試しください。"
+      not_found: "が見つかりません。"
+      not_locked: "はロックされていません。"
+      not_saved:
+        one: "エラーが1件あるため保存できませんでした。"
+        other: "エラーが%{count}件あるため保存できませんでした。"
+  activerecord:
+    errors:
+      messages:
+        blank: "を入力してください"
+        inclusion: "は一覧にありません"
+        too_short: "は%{count}文字以上で入力してください"
+        too_long: "は%{count}文字以下で入力してください"
+        taken: "はすでに使用されています"
+        invalid: "は正しい形式で入力してください"
+        confirmation: "が一致しません"
+    models:
+      user: "アカウント"
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
+      profile:
+        name: "名前"
+        birthday: "生年月日"
+        hometown: "出身地"
+        education: "学歴"
+        blood_type: "血液型"
+      answer:
+        body: "回答"
+        question_option_id: "選択肢"
+  enums:
+    profile:
+      hometown:
+        hokkaido: "北海道"
+        aomori: "青森県"
+        iwate: "岩手県"
+        miyagi: "宮城県"
+        akita: "秋田県"
+        yamagata: "山形県"
+        fukushima: "福島県"
+        ibaraki: "茨城県"
+        tochigi: "栃木県"
+        gunma: "群馬県"
+        saitama: "埼玉県"
+        chiba: "千葉県"
+        tokyo: "東京都"
+        kanagawa: "神奈川県"
+        niigata: "新潟県"
+        toyama: "富山県"
+        ishikawa: "石川県"
+        fukui: "福井県"
+        yamanashi: "山梨県"
+        nagano: "長野県"
+        gifu: "岐阜県"
+        shizuoka: "静岡県"
+        aichi: "愛知県"
+        mie: "三重県"
+        shiga: "滋賀県"
+        kyoto: "京都府"
+        osaka: "大阪府"
+        hyogo: "兵庫県"
+        nara: "奈良県"
+        wakayama: "和歌山県"
+        tottori: "鳥取県"
+        shimane: "島根県"
+        okayama: "岡山県"
+        hiroshima: "広島県"
+        yamaguchi: "山口県"
+        tokushima: "徳島県"
+        kagawa: "香川県"
+        ehime: "愛媛県"
+        kochi: "高知県"
+        fukuoka: "福岡県"
+        saga: "佐賀県"
+        nagasaki: "長崎県"
+        kumamoto: "熊本県"
+        oita: "大分県"
+        miyazaki: "宮崎県"
+        kagoshima: "鹿児島県"
+        okinawa: "沖縄県"
+      education:
+        junior_high: "中学卒"
+        high_school: "高校卒"
+        vocational: "専門学校卒"
+        junior_college: "短大卒"
+        university: "大学卒"
+        graduate: "大学院卒"
+        other: "その他"
+      blood_type:
+        type_a: "A型"
+        type_b: "B型"
+        type_o: "O型"
+        type_ab: "AB型"
