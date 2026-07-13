@@ -1,6 +1,6 @@
 <div class="pt-8 pb-4">
   <h1 class="text-xl font-bold mb-1">追加情報の入力</h1>
-  <p class="text-sm text-gray-400">あなたの取扱い方法を教えてください。全14問です。</p>
+  <p class="text-sm text-gray-400">あなたの取扱い方法を教えてください。全12問です。</p>
 </div>
 
 <%= form_with url: step1_manuals_path, method: :post, data: { turbo: false } do |f| %>
@@ -31,13 +31,12 @@
               answer&.body,
               rows: 3,
               placeholder: {
-                8 => "例：音楽、推しの話、旅行",
-                9 => "例：よくしゃべる、食欲が増す、アイデアが浮かびやすい",
-                10 => "例：無口になる、食欲がなくなる、返信が遅くなる",
-                11 => "例：チョコ、好きな音楽を聴く、睡眠",
-                12 => "例：カラオケ、一人の時間を作る、運動",
-                13 => "例：好きな曲が流れたとき、褒められたとき、サプライズされたとき",
-                14 => "例：約束を破られること、無視されること、急に予定を変えられること"
+                2 => "例：静かな場所、少人数の空間、自分のペースで動ける環境",
+                4 => "例：音楽、旅行、最近ハマってること",
+                6 => "例：大勢の場、騒がしい環境、予定が詰まっているとき",
+                8 => "例：約束を破られること、無視されること、急に予定を変えられること",
+                10 => "例：そっとしておいてほしい、話を聞いてほしい",
+                12 => "例：気軽に声をかけてほしい、一緒にいてほしい"
               }[question.position] || "入力してください",
               class: "w-full border border-gray-200 rounded-xl p-3 text-sm bg-white text-gray-900 placeholder-gray-300 outline-none focus:border-accent-purple transition-colors resize-none" %>
         <% end %>
