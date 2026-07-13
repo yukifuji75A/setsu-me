@@ -113,15 +113,9 @@
   <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
     <% if @manual %>
       <section class="mb-4">
-        <div class="bg-dark-card rounded-2xl p-4 mb-3">
-          <p class="text-xs text-dark-muted mb-2">基本スペック</p>
-          <p class="text-sm leading-relaxed">
-            <%= @manual.manual_ai_texts.find_by(section_type: :basic_spec)&.ai_text %>
-          </p>
-        </div>
         <div class="bg-dark-card rounded-2xl p-4">
-          <p class="text-xs text-dark-muted mb-2">取扱いガイド</p>
-          <p class="text-sm leading-relaxed">
+          <p class="text-xs text-dark-muted mb-2">AI分析レポート</p>
+          <p class="text-sm leading-relaxed whitespace-pre-line">
             <%= @manual.manual_ai_texts.find_by(section_type: :handling_guide)&.ai_text %>
           </p>
         </div>
