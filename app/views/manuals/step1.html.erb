@@ -30,7 +30,15 @@
           <%= text_area_tag "answers[#{question.id}][body]",
               answer&.body,
               rows: 3,
-              placeholder: "入力してください",
+              placeholder: {
+                8 => "例：音楽、推しの話、旅行",
+                9 => "例：よくしゃべる、食欲が増す、アイデアが浮かびやすい",
+                10 => "例：無口になる、食欲がなくなる、返信が遅くなる",
+                11 => "例：チョコ、好きな音楽を聴く、睡眠",
+                12 => "例：カラオケ、一人の時間を作る、運動",
+                13 => "例：好きな曲が流れたとき、褒められたとき、サプライズされたとき",
+                14 => "例：約束を破られること、無視されること、急に予定を変えられること"
+              }[question.position] || "入力してください",
               class: "w-full border border-gray-200 rounded-xl p-3 text-sm bg-white text-gray-900 placeholder-gray-300 outline-none focus:border-accent-purple transition-colors resize-none" %>
         <% end %>
       </div>
