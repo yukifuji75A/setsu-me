@@ -1,3 +1,11 @@
+Answer.delete_all
+ManualAiText.delete_all
+Manual.delete_all
+QuestionOption.delete_all
+Question.delete_all
+Profile.delete_all
+User.delete_all
+
 # ====================
 # 共通情報（theme: :common）
 # ====================
