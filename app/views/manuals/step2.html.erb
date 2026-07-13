@@ -5,13 +5,8 @@
 
 <div class="space-y-4 mb-8">
   <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
-    <p class="text-xs text-gray-400 mb-2">基本スペック</p>
-    <p class="text-sm leading-relaxed text-gray-900"><%= @basic_spec %></p>
-  </div>
-
-  <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
-    <p class="text-xs text-gray-400 mb-2">取扱いガイド</p>
-    <p class="text-sm leading-relaxed text-gray-900"><%= @handling_guide %></p>
+    <p class="text-xs text-gray-400 mb-2">製品概要</p>
+    <p class="text-sm leading-relaxed text-gray-900"><%= @basic_spec&.ai_text %></p>
   </div>
 </div>
 
