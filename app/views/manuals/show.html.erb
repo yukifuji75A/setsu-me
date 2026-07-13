@@ -79,8 +79,21 @@
       <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第3章</span>
       <span class="text-sm font-semibold text-gray-900">推奨環境</span>
     </div>
-    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4 text-sm text-gray-400 text-center">
-      準備中
+    <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+      <dl class="divide-y divide-violet-100 text-sm">
+        <% @default_answers.select { |a| [1, 2, 3, 4].include?(a.question.position) }.each do |answer| %>
+          <div class="flex gap-4 px-4 py-3">
+            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
+            <dd class="text-gray-900 text-xs flex-1">
+              <% if answer.question.selection? %>
+                <%= answer.question_option&.label %>
+              <% else %>
+                <%= answer.body %>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
     </div>
   </div>
 
@@ -90,8 +103,21 @@
       <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第4章</span>
       <span class="text-sm font-semibold text-gray-900">非推奨・注意事項</span>
     </div>
-    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4 text-sm text-gray-400 text-center">
-      準備中
+    <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+      <dl class="divide-y divide-violet-100 text-sm">
+        <% @default_answers.select { |a| [5, 6, 7, 8].include?(a.question.position) }.each do |answer| %>
+          <div class="flex gap-4 px-4 py-3">
+            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
+            <dd class="text-gray-900 text-xs flex-1">
+              <% if answer.question.selection? %>
+                <%= answer.question_option&.label %>
+              <% else %>
+                <%= answer.body %>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
     </div>
   </div>
 
@@ -101,8 +127,24 @@
       <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">第5章</span>
       <span class="text-sm font-semibold text-gray-900">トラブル対処</span>
     </div>
-    <div class="bg-white border-2 border-violet-500 rounded-2xl p-4 text-sm text-gray-400 text-center">
-      準備中
+    <div class="space-y-3">
+      <% [[9, 10], [11, 12]].each do |situation_pos, action_pos| %>
+        <% situation = @default_answers.find { |a| a.question.position == situation_pos } %>
+        <% action = @default_answers.find { |a| a.question.position == action_pos } %>
+        <% next unless situation && action %>
+        <div class="bg-white border-2 border-violet-500 rounded-2xl overflow-hidden">
+          <div class="flex divide-x divide-violet-100">
+            <div class="flex-1 p-3">
+              <p class="text-xs text-gray-400 mb-1">症状</p>
+              <p class="text-xs text-gray-900 font-medium"><%= situation.question_option&.label %></p>
+            </div>
+            <div class="flex-1 p-3">
+              <p class="text-xs text-gray-400 mb-1">対策</p>
+              <p class="text-xs text-gray-900"><%= action.body %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 
