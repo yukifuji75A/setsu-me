@@ -101,14 +101,14 @@ class ManualGeneratorService
   end
 
   def introduction_lines
-    common = answers_for(:common, positions: [1, 2, 3, 4, 5])
-    default = answers_for(:default, positions: [1, 3])
+    common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
+    default = answers_for(:default, positions: [ 1, 3 ])
     format_lines(common + default)
   end
 
   def analysis_lines
-    common = answers_for(:common, positions: [1, 2, 3, 4, 5])
-    default = answers_for(:default, positions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
+    default = answers_for(:default, positions: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ])
     format_lines(common + default)
   end
 
