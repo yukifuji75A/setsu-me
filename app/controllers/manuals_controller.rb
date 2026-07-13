@@ -12,9 +12,9 @@ class ManualsController < ApplicationController
     return unless request.post?
 
     ActiveRecord::Base.transaction do
-      answer_params.each do |question_id, answer_data|
-        question = Question.find(question_id)
-        answer = current_user.answers.find_or_initialize_by(question_id: question_id)
+      @questions.each do |question|
+        answer_data = answer_params[question.id.to_s] || {}
+        answer = current_user.answers.find_or_initialize_by(question_id: question.id)
         if question.selection?
           answer.question_option_id = answer_data[:question_option_id]
           answer.body = nil
@@ -38,7 +38,7 @@ class ManualsController < ApplicationController
       end
       @answers[question_id.to_i] = answer
     end
-    flash.now[:alert] = "入力内容を確認してください"
+    flash.now[:alert] = "全ての質問に回答してください"
     render :step1, status: :unprocessable_entity
   end
 

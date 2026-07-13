@@ -1,6 +1,6 @@
 <div class="pt-8 pb-4">
   <h1 class="text-xl font-bold mb-1">共通情報の入力</h1>
-  <p class="text-sm text-gray-400">あなたのことを教えてください。全6問です。</p>
+  <p class="text-sm text-gray-400">あなたのことを教えてください。全5問です。</p>
 </div>
 
 <%= form_with url: common_answers_path, method: :patch, data: { turbo: false } do |f| %>
@@ -30,7 +30,7 @@
           <%= text_area_tag "answers[#{question.id}][body]",
               answer&.body,
               rows: 3,
-              placeholder: { 5 => "例：カフェ巡り、推し、映画鑑賞", 6 => "例：大勢の場、急な予定変更、電話" }[question.position] || "入力してください",
+              placeholder: { 3 => "例：映画鑑賞、カフェ巡り、読書" }[question.position] || "入力してください",
               class: "w-full border border-gray-200 rounded-xl p-3 text-sm bg-white text-gray-900 placeholder-gray-300 outline-none focus:border-accent-purple transition-colors resize-none" %>
         <% end %>
       </div>
