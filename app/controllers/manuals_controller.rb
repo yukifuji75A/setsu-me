@@ -71,6 +71,11 @@ class ManualsController < ApplicationController
     @common_answers = common_answers_for(current_user)
     @basic_spec = @manual&.manual_ai_texts&.find_by(section_type: :basic_spec)
     @handling_guide = @manual&.manual_ai_texts&.find_by(section_type: :handling_guide)
+    @default_answers = current_user.answers
+                                   .joins(:question)
+                                   .where(questions: { theme: :default })
+                                   .includes(:question, :question_option)
+                                   .sort_by { |a| a.question.position }
   end
 
   def step3_save

@@ -90,7 +90,7 @@
         <div class="bg-dark-card rounded-2xl p-4 space-y-4 text-sm">
           <% @common_answers.each do |answer| %>
             <div>
-              <p class="text-dark-muted text-xs mb-1"><%= answer.question.title %></p>
+              <p class="text-dark-muted text-xs mb-1"><%= answer.question.display_label %></p>
               <p>
                 <% if answer.question.selection? %>
                   <%= answer.question_option&.label %>
