@@ -84,8 +84,12 @@ class ManualsController < ApplicationController
     @manual = current_user.manuals.find(params[:id])
     @profile = current_user.profile
     @common_answers = common_answers_for(current_user)
+    @default_answers = current_user.answers
+                                   .joins(:question)
+                                   .where(questions: { theme: :default })
+                                   .includes(:question, :question_option)
+                                   .sort_by { |a| a.question.position }
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
-    @handling_guide = @manual.manual_ai_texts.find_by(section_type: :handling_guide)
   end
 
   private
