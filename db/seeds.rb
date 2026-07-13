@@ -190,6 +190,6 @@ end
 
 # Q14: 地雷
 Question.find_or_create_by!(theme: :default, position: 14) do |question|
-  question.title = "あなたの地雷を教えてください（例：絶対にやめてほしいこと、これだけはNG！なことなど）"
+  question.title = "あなたの地雷を教えてください（絶対にやめてほしいこと、これだけはNG！なことなど）"
   question.answer_type = :text
 end
