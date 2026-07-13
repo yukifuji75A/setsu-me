@@ -12,9 +12,9 @@ class ManualsController < ApplicationController
     return unless request.post?
 
     ActiveRecord::Base.transaction do
-      answer_params.each do |question_id, answer_data|
-        question = Question.find(question_id)
-        answer = current_user.answers.find_or_initialize_by(question_id: question_id)
+      @questions.each do |question|
+        answer_data = answer_params[question.id.to_s] || {}
+        answer = current_user.answers.find_or_initialize_by(question_id: question.id)
         if question.selection?
           answer.question_option_id = answer_data[:question_option_id]
           answer.body = nil
@@ -38,55 +38,63 @@ class ManualsController < ApplicationController
       end
       @answers[question_id.to_i] = answer
     end
-    flash.now[:alert] = "入力内容を確認してください"
+    flash.now[:alert] = "全ての質問に回答してください"
     render :step1, status: :unprocessable_entity
   end
 
   def step2
     result = ManualGeneratorService.new(current_user).call
-    @basic_spec = result[:basic_spec]
-    @handling_guide = result[:handling_guide]
-    session[:basic_spec] = @basic_spec
-    session[:handling_guide] = @handling_guide
+
+    manual = current_user.manuals.find_or_initialize_by(theme: :default)
+    manual.save!
+
+    manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|
+      t.ai_text = result[:basic_spec]
+      t.save!
+    end
+
+    manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
+      t.ai_text = result[:handling_guide]
+      t.save!
+    end
+
+    @manual = manual
+    @basic_spec = manual.manual_ai_texts.find_by(section_type: :basic_spec)
+    @handling_guide = manual.manual_ai_texts.find_by(section_type: :handling_guide)
   rescue StandardError
     redirect_to step1_manuals_path, alert: "生成に失敗しました。もう一度お試しください。"
   end
 
   def step3
+    @manual = current_user.manuals.find_by(theme: :default)
     @profile = current_user.profile
     @common_answers = common_answers_for(current_user)
-    @basic_spec = session[:basic_spec]
-    @handling_guide = session[:handling_guide]
+    @basic_spec = @manual&.manual_ai_texts&.find_by(section_type: :basic_spec)
+    @handling_guide = @manual&.manual_ai_texts&.find_by(section_type: :handling_guide)
+    @default_answers = current_user.answers
+                                   .joins(:question)
+                                   .where(questions: { theme: :default })
+                                   .includes(:question, :question_option)
+                                   .sort_by { |a| a.question.position }
   end
 
   def step3_save
-    manual = current_user.manuals.find_or_initialize_by(theme: :default)
-    manual.save!
-
-    manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|
-      t.ai_text = session[:basic_spec]
-      t.save!
-    end
-
-    manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
-      t.ai_text = session[:handling_guide]
-      t.save!
-    end
-
-    session.delete(:basic_spec)
-    session.delete(:handling_guide)
-
+    manual = current_user.manuals.find_by!(theme: :default)
     redirect_to manual_path(manual), notice: "トリセツを発行しました！"
-  rescue StandardError
-    redirect_to step3_manuals_path, alert: "保存に失敗しました。もう一度お試しください。"
+  rescue ActiveRecord::RecordNotFound
+    redirect_to step1_manuals_path, alert: "保存に失敗しました。もう一度お試しください。"
   end
 
   def show
     @manual = current_user.manuals.find(params[:id])
     @profile = current_user.profile
     @common_answers = common_answers_for(current_user)
+    @default_answers = current_user.answers
+                                   .joins(:question)
+                                   .where(questions: { theme: :default })
+                                   .includes(:question, :question_option)
+                                   .sort_by { |a| a.question.position }
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
-    @handling_guide = @manual.manual_ai_texts.find_by(section_type: :handling_guide)
   end
 
   private
