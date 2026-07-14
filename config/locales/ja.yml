@@ -73,6 +73,14 @@ ja:
         confirmation: "が一致しません"
     models:
       user: "アカウント"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "の入力内容を確認してください"
+            password:
+              too_short: "は%{count}文字以上で入力してください"
     attributes:
       user:
         email: "メールアドレス"
