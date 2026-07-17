@@ -41,232 +41,100 @@ docker-compose exec web rails db:create
 
 ---
 
-## 現在の進捗
+## DBスキーマ
 
-### Week 1（6/30〜7/6）
-
-| # | タスク | 状態 |
-|---|------|------|
-| 1 | GitHubリポジトリ作成 | ✅ 完了 |
-| 2 | rails new + Docker環境構築 | ✅ 完了 |
-| 3 | 仮TOPページ作成・ルーティング確認 | ✅ 完了 |
-| 4 | Renderデプロイ・本番動作確認 | ⬜ 未着手 |
-| 5 | Gem導入・Tailwind CSS + Hotwire設定 | ✅ 完了 |
-| 6 | マイグレーション・モデル・ルーティング設計・シード作成 | ✅ 完了 |
-| 7 | Devise設定・ユーザー登録・ログイン画面実装 | ✅ 完了 |
-| 8 | プロフィール設定画面実装 | ✅ 完了 |
-| 9 | OpenAI APIキー取得・接続確認 | ✅ 完了 |
-| 10 | README技術スタック最終更新 | ⬜ 未着手 |
-
-### Week 2（7/7〜7/12）
-
-| # | タスク | 状態 |
-|---|------|------|
-| 11 | 共通情報入力画面実装 | ✅ 完了 |
-| 12 | マイページ（基本情報・AI分析タブ）実装 | ✅ 完了 |
-| 13 | トリセツ作成①（追加入力）画面実装 | ⬜ 未着手 |
-| 14 | AI文章生成API連携実装 | ⬜ 未着手 |
-| 15 | トリセツ作成②（AI生成・確認）画面実装 | ⬜ 未着手 |
-| 16 | トリセツ作成③（最終確認）画面実装 | ⬜ 未着手 |
-| 17 | トリセツプレビュー画面実装 | ⬜ 未着手 |
-| 18 | UI調整・バグ修正・最終デプロイ・動作確認 | ⬜ 未着手 |
-
----
-
-## 現在のコード構成
-
-```
-app/
-  controllers/
-    pages_controller.rb      # TOPページ（仮）
-  views/
-    pages/top.html.erb       # 仮TOPページ（ログイン画面に後で置き換え）
-    layouts/application.html.erb
-config/
-  routes.rb                  # root → pages#top
-  database.yml               # DB_HOST / DB_USER / DB_PASSWORD を環境変数で管理
-  brakeman.yml               # confidence_level: 2（EOLRails警告を除外）
-.ruby-version                # 3.3.8
-Dockerfile                   # ruby:3.3-slim
-docker-compose.yml           # web + db (postgres:16-alpine)
-.github/workflows/ci.yml     # lint / scan_ruby(-w 2) / scan_js
-```
-
----
-
-## MVPスコープ
-
-### 実装する機能
-1. 認証・ユーザー管理（ログイン・ユーザー登録）
-2. トリセツ作成（情報入力・AI文章生成・同期処理）
-3. マイページ（基本情報 / AI分析 タブ切り替え）
-4. トリセツ管理（プレビュー表示）
-
-### MVPに含まない機能（本リリース）
-- LINE連携
-- 外部共有URL・LINE共有
-- マルチテーマ（恋人・友だち）
-- トリセツ編集・AI再生成
-- レーダーチャート
-- プロフィール画像アップロード
-- 非同期処理（Sidekiq）
-
----
-
-## DBスキーマ（確定）
-
-### Users
-| カラム | 型 | 制約 |
-|------|------|------|
-| email | string | UQ / NN |
-| encrypted_password | string | NN |
-| provider | string | - |
-| uid | string | - |
-| created_at / updated_at | datetime | NN |
-
-### Profiles
+### Users（ユーザー認証）
 | カラム | 型 | 制約 | 備考 |
 |------|------|------|------|
-| user_id | bigint | FK / UQ / NN | |
-| name | string | NN | 表示名 |
-| birthday | date | NN | 年齢・星座を計算で導出 |
-| hometown | integer | NN | enum: 47都道府県 |
-| education | integer | NN | enum: 中学卒/高校卒/専門学校卒/短大卒/大学卒/大学院卒/その他 |
-| blood_type | integer | NN | enum: A/B/O/AB |
+| email | string | UQ / NN | 通常登録時は必須、LINE登録時は空を許容（本リリースでマイグレーション予定） |
+| encrypted_password | string | NN | 通常登録時は必須、LINE登録時は空を許容（本リリースでマイグレーション予定） |
+| provider | string | - | OAuthのプロバイダ名（LINE）（本リリースで追加予定） |
+| uid | string | - | LINE側の一意のユーザーID / providerと複合UNIQUE（本リリースで追加予定） |
 | created_at / updated_at | datetime | NN | |
 
-### Manuals（トリセツ本体）
+### Profiles（プロフィール情報）
 | カラム | 型 | 制約 | 備考 |
 |------|------|------|------|
-| user_id | bigint | FK / NN | |
-| theme | integer | NN | enum: 0:デフォルト / 1:恋人 / 2:友だち。user_idと複合UNIQUE |
-| share_token | string | UQ / NN | 外部共有URL用（MVPではUI非表示） |
+| user_id | bigint | FK / UQ / NN | usersへの外部キー |
+| name | string | NN | 表示名（ニックネーム） |
+| birthday | date | NN | 誕生日（年齢・星座を計算で導出） |
+| hometown | integer | NN | 出身（enum: 47都道府県） |
+| education | integer | NN | 学歴（enum: 中学卒〜大学院卒、その他） |
+| blood_type | integer | NN | 血液型（enum: A/B/O/AB） |
 | created_at / updated_at | datetime | NN | |
 
-### Manual_ai_texts（AI生成文章）
+### Manuals（トリセツ本体・テーマ管理）
 | カラム | 型 | 制約 | 備考 |
 |------|------|------|------|
-| manual_id | bigint | FK / NN | |
-| section_type | integer | NN | enum: 0:基本スペック / 1:取扱いガイド。manual_idと複合UNIQUE |
-| ai_text | text | NN | AIが生成したオリジナル文章 |
-| user_edited_text | text | - | ユーザー編集文章（本リリース） |
+| user_id | bigint | FK / NN | usersテーブルへの外部キー |
+| theme | integer | NN | テーマの種類（enum: 0:デフォルト / 1:恋人 / 2:友だち）/ user_idと複合UNIQUE |
+| share_token | string | UQ / NN | 外部共有URL用の文字列 |
+| created_at / updated_at | datetime | NN | |
+
+### Manual_ai_texts（AI生成・編集文章）
+| カラム | 型 | 制約 | 備考 |
+|------|------|------|------|
+| manual_id | bigint | FK / NN | manualsテーブルへの外部キー |
+| section_type | integer | NN | どの項目の文章か（enum: 項目ごとに定義）/ manual_idと複合UNIQUE |
+| ai_text | text | NN | AIが生成したオリジナルの文章 |
+| user_edited_text | text | - | ユーザーが編集・上書きした文章（本リリースでUI実装予定） |
 | created_at / updated_at | datetime | NN | |
 
 ### Questions（質問マスタ）
 | カラム | 型 | 制約 | 備考 |
 |------|------|------|------|
-| theme | integer | NN | enum: 0:共通 / 1:デフォルト / 2:恋人 / 3:友だち |
-| title | string | NN | 質問文 |
-| answer_type | integer | NN | enum: 0:選択式 / 1:記述式 / 2:スコア型 |
-| position | integer | NN | 表示順 |
+| theme | integer | NN | 質問の対象テーマ（enum: 共通 / デフォルト / 恋人 / 友だち） |
+| title | string | NN | 質問文（例：「MBTIタイプは？」など） |
+| answer_type | integer | NN | 回答のタイプ（enum: 選択式 / 記述式 / スコア型） |
+| position | integer | NN | 質問の表示順・並び替え用 |
 | created_at / updated_at | datetime | NN | |
 
 ### Question_options（選択肢マスタ）
-| カラム | 型 | 制約 |
-|------|------|------|
-| question_id | bigint | FK / NN |
-| label | string | NN |
-| position | integer | NN |
-| created_at / updated_at | datetime | NN |
+| カラム | 型 | 制約 | 備考 |
+|------|------|------|------|
+| question_id | bigint | FK / NN | どの質問に対する選択肢か |
+| label | string | NN | 選択肢のテキスト |
+| position | integer | NN | 選択肢の表示順・並び替え用 |
+| created_at / updated_at | datetime | NN | |
 
 ### Answers（ユーザー回答）
 | カラム | 型 | 制約 | 備考 |
 |------|------|------|------|
-| user_id | bigint | FK / NN | user_idとquestion_idで複合UNIQUE |
-| question_id | bigint | FK / NN | |
-| question_option_id | bigint | FK | 選択式のみ使用 |
-| body | text | - | 記述式の回答テキスト |
-| score | integer | - | スコア型・グラフ集計用（本リリース） |
+| user_id | bigint | FK / NN | どのユーザーの回答か |
+| question_id | bigint | FK / NN | どの質問への回答か / user_idと複合UNIQUE |
+| question_option_id | bigint | FK | 選択式の場合の選んだ選択肢ID |
+| body | text | - | 記述式の場合の回答テキスト |
+| score | integer | - | 数値形式の回答（グラフ集計用） |
 | created_at / updated_at | datetime | NN | |
 
 ---
 
-## AI生成設計
+## 本リリース実装予定
 
-### 方針
-- OpenAI API（gpt-4o-mini）を使用
-- 発行ボタン押下時のみ生成（同期処理、MVPはSidekiq不使用）
-- 1回のAPIリクエストでJSON形式で2セクションを同時生成
-- エラー時は「もう一度お試しください」表示のみ
+### 機能
+- LINE連携（OmniAuth + omniauth-line）
+- 外部共有機能（共有URL発行・ログイン不要閲覧・LINEシェア）
+- マルチテーマ機能（恋人・友だち）
+- トリセツ編集・AI生成文章のユーザー編集・AI再生成（回数制限付き）
+- レーダーチャート（Chart.js）+ 回答スコア導入
+- プロフィール画像アップロード（Active Storage + S3）
+- AI文章生成の非同期処理（Sidekiq + Redis）
+- アカウント設定（メアド・パスワード変更、利用規約、プライバシーポリシー）
 
-### セクション構成（MVPはデフォルトテーマのみ）
-| section_type | 名称 | 元データ |
-|------|------|------|
-| 0 | 基本スペック | 共通情報（Q1〜Q8）の回答 |
-| 1 | 取扱いガイド | デフォルト追加情報（Q1〜Q12）の回答 |
-
-### AIへのデータ参照ルール
-- デフォルトManualのAI生成時：`Questions.theme IN (0:共通, 1:デフォルト)` の回答を使用
-- 回答は `Answers` テーブルから `user_id + question_id` で取得
-
-### プロンプト構造
-
-**システムプロンプト（共通）**
-```
-あなたは「人間の取扱説明書」を書く専門のコピーライターです。
-家電製品の取扱説明書を模した文体で執筆。
-「本モデル」などの製品風表現 + クスッと笑えるユーモア1〜2箇所。
-です・ます調、箇条書き禁止、余計な説明禁止。
-必ず以下のJSON形式のみ返却：
-{"basic_spec": "...", "handling_guide": "..."}
-```
-
-**出力形式**
-```json
-{
-  "basic_spec": "150〜250文字。「本モデル」から書き始め、性格・価値観・趣味を盛り込む",
-  "handling_guide": "150〜250文字。「取扱い上の注意」を1度使い、接し方ガイドを記述"
-}
-```
-
-**Rails実装イメージ**
-```ruby
-response_format: { type: "json_object" }  # JSON確定
-result = JSON.parse(response.dig("choices", 0, "message", "content"))
-# result["basic_spec"] と result["handling_guide"] を保存
-```
+### 技術・品質
+- RSpec導入 + カバレッジ測定（SimpleCov等）
+- CI導入（GitHub Actions）
+- N+1対策（Bullet等）
+- Fat Controller / Fat Model の解消
 
 ---
 
-## 重要な設計決定事項
-
-- **選択式は全て単数選択**（複数選択は本リリース）
-- **share_token はMVP時点からDBに保存**（UIは非表示）
-- **年齢・星座はbirthdayから計算**（DBカラムなし）
-- **AI文章生成は同期処理**（Sidekiqは本リリース）
-- **Profilesは全項目必須**
-- **Renderデプロイはネイティブ方式**（本番Dockerfile不要）
-- **RSpecはMVP後に追加**（現在テストなし）
-- **AI生成文章の編集機能はMVP対象外**（user_edited_text カラムはDB上に存在するが、MVPではUIを提供しない）
-
----
-
-## 画面遷移フロー（確定）
-
-### アカウント登録後の初回フロー
-アカウント登録 → プロフィール設定 → 共通情報入力（全8問・1画面） → マイページ
-
-### ログイン後のフロー
-ログイン → プロフィール設定済み：マイページへ遷移 / 未設定：プロフィール設定画面へ遷移
-
-### マイページからトリセツを作るフロー
-マイページ（「トリセツを作る」ボタン）
-  → ステップ1: 追加情報入力（全12問・1画面）
-  → ステップ2: AI文章生成・確認（生成結果の表示のみ、編集不可）
-  → ステップ3: 最終確認
-  → 「トリセツを生成する」ボタン → トリセツプレビュー → マイページ（AI分析タブ）
-
----
 
 ## 開発ルール
 
 - issueごとに作業ブランチを作成して作業すること
-- ブランチ名は `feature/機能名`（例: `feature/common-answers`）
-- ブランチ名の提案はClaudeが行い、作成はユーザーが行うこと
 - 新しいブランチの作業開始時は、そのブランチで実装する内容と工程を最初に提示すること
 - 新しいビューファイルを追加したとき、または初めて使うTailwindクラスを追加したときは `rails tailwindcss:build` を実行すること（Docker内では `docker-compose exec web rails tailwindcss:build`）
 - コミット前に rubocop を実施し、lintエラーを解消してからコミットすること
 - マージ前にブラウザ上で実装した内容通りの動作ができているか確認すること
-- ファイル生成・コード記述は基本的にユーザーが行うこと（Claudeは差分・内容の提示のみ）
 - 指示や意図が曖昧な場合、または理解できない場合は推測で進めず確認をとること
-- マージ前の動作確認が終わり、次のブランチを切る前に、そのブランチの作業内容をGitHub PRの説明文形式でまとめること
