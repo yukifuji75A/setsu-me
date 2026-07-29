@@ -24,23 +24,9 @@ class ManualsController < ApplicationController
 
   def step2
     result = ManualGeneratorService.new(current_user).call
-
-    manual = current_user.manuals.find_or_initialize_by(theme: :default)
-    manual.save!
-
-    manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|
-      t.ai_text = result[:basic_spec]
-      t.save!
-    end
-
-    manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
-      t.ai_text = result[:handling_guide]
-      t.save!
-    end
-
-    @manual = manual
-    @basic_spec = manual.manual_ai_texts.find_by(section_type: :basic_spec)
-    @handling_guide = manual.manual_ai_texts.find_by(section_type: :handling_guide)
+    @manual = ManualPersistService.new(current_user).call(result)
+    @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
+    @handling_guide = @manual.manual_ai_texts.find_by(section_type: :handling_guide)
   rescue StandardError
     redirect_to step1_manuals_path, alert: "生成に失敗しました。もう一度お試しください。"
   end
