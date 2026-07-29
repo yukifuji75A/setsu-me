@@ -1,4 +1,6 @@
 class ManualsController < ApplicationController
+  include AnswerInputRestorable
+
   layout "input", only: [ :step1, :step2, :step3, :show ]
   def step1
     if current_user.answers.joins(:question).where(questions: { theme: :common }).empty?
@@ -11,35 +13,13 @@ class ManualsController < ApplicationController
 
     return unless request.post?
 
-    ActiveRecord::Base.transaction do
-      @questions.each do |question|
-        answer_data = answer_params[question.id.to_s] || {}
-        answer = current_user.answers.find_or_initialize_by(question_id: question.id)
-        if question.selection?
-          answer.question_option_id = answer_data[:question_option_id]
-          answer.body = nil
-        else
-          answer.body = answer_data[:body]
-          answer.question_option_id = nil
-        end
-        answer.save!
-      end
+    if AnswerSaveService.new(current_user, @questions, answer_params).call
+      redirect_to step2_manuals_path
+    else
+      restore_answer_inputs(@questions, @answers, answer_params)
+      flash.now[:alert] = "全ての質問に回答してください"
+      render :step1, status: :unprocessable_entity
     end
-    redirect_to step2_manuals_path
-  rescue ActiveRecord::RecordInvalid
-    answer_params.each do |question_id, answer_data|
-      question = @questions.find { |q| q.id == question_id.to_i }
-      next unless question
-      answer = @answers[question_id.to_i] || Answer.new(question: question)
-      if question.selection?
-        answer.question_option_id = answer_data[:question_option_id].presence&.to_i
-      else
-        answer.body = answer_data[:body]
-      end
-      @answers[question_id.to_i] = answer
-    end
-    flash.now[:alert] = "全ての質問に回答してください"
-    render :step1, status: :unprocessable_entity
   end
 
   def step2
