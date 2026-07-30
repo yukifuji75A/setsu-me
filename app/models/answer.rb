@@ -8,4 +8,9 @@ class Answer < ApplicationRecord
   validates :user_id, uniqueness: { scope: :question_id }
   validates :body, presence: true, if: -> { question&.text? }
   validates :question_option_id, presence: true, if: -> { question&.selection? }
+
+  # ========== スコープ ==========
+  scope :for_theme, ->(theme) {
+    joins(:question).where(questions: { theme: theme }).includes(:question, :question_option)
+  }
 end

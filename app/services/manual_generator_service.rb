@@ -114,9 +114,8 @@ class ManualGeneratorService
 
   def answers_for(theme, positions:)
     @user.answers
-         .joins(:question)
-         .where(questions: { theme: theme, position: positions })
-         .includes(:question, :question_option)
+         .for_theme(theme)
+         .merge(Question.where(position: positions))
          .sort_by { |a| a.question.position }
   end
 

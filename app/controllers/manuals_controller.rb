@@ -37,11 +37,7 @@ class ManualsController < ApplicationController
     @common_answers = common_answers_for(current_user)
     @basic_spec = @manual&.manual_ai_texts&.find_by(section_type: :basic_spec)
     @handling_guide = @manual&.manual_ai_texts&.find_by(section_type: :handling_guide)
-    @default_answers = current_user.answers
-                                   .joins(:question)
-                                   .where(questions: { theme: :default })
-                                   .includes(:question, :question_option)
-                                   .sort_by { |a| a.question.position }
+    @default_answers = current_user.answers.for_theme(:default).sort_by { |a| a.question.position }
   end
 
   def step3_save
@@ -55,22 +51,14 @@ class ManualsController < ApplicationController
     @manual = current_user.manuals.find(params[:id])
     @profile = current_user.profile
     @common_answers = common_answers_for(current_user)
-    @default_answers = current_user.answers
-                                   .joins(:question)
-                                   .where(questions: { theme: :default })
-                                   .includes(:question, :question_option)
-                                   .sort_by { |a| a.question.position }
+    @default_answers = current_user.answers.for_theme(:default).sort_by { |a| a.question.position }
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
   end
 
   private
 
   def common_answers_for(user)
-    user.answers
-        .joins(:question)
-        .where(questions: { theme: :common })
-        .includes(:question, :question_option)
-        .sort_by { |a| a.question.position }
+    user.answers.for_theme(:common).sort_by { |a| a.question.position }
   end
 
   def answer_params
