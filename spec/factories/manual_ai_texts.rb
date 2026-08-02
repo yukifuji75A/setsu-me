@@ -5,4 +5,3 @@ FactoryBot.define do
     ai_text { "AIが生成したテスト文章です。" }
   end
 end
-
