@@ -23,7 +23,7 @@ class ManualsController < ApplicationController
   end
 
   def step2
-    result = ManualGeneratorService.new(current_user).call
+    result = manual_generator_service.call
     @manual = ManualPersistService.new(current_user).call(result)
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
     @handling_guide = @manual.manual_ai_texts.find_by(section_type: :handling_guide)
@@ -56,6 +56,10 @@ class ManualsController < ApplicationController
   end
 
   private
+
+  def manual_generator_service
+    ManualGeneratorService.new(current_user)
+  end
 
   def common_answers_for(user)
     user.answers.for_theme(:common).sort_by { |a| a.question.position }
