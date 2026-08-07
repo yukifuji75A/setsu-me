@@ -20,6 +20,8 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 gem "devise"
+gem "omniauth-line"
+gem "omniauth-rails_csrf_protection"
 
 gem "ruby-openai"
 gem "dotenv-rails", groups: [ :development, :test ]
