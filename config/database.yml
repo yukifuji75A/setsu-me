@@ -16,4 +16,4 @@ test:
 
 production:
   <<: *default
-  database: setsu_me_production
+  url: <%= ENV["DATABASE_URL"] %>
