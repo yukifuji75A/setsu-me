@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   resource :profile, only: [ :new, :create, :edit, :update ]
   resource :common_answers, only: [ :edit, :update ], path: "common-answers"
   resource :mypage, only: [ :show ], controller: "mypage"
