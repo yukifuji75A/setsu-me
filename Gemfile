@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2"
+gem "rails", "~> 8.0.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use postgresql as the database for Active Record
@@ -20,6 +20,8 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 gem "devise"
+gem "omniauth-line"
+gem "omniauth-rails_csrf_protection"
 
 gem "ruby-openai"
 gem "dotenv-rails", groups: [ :development, :test ]
@@ -51,9 +53,19 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+end
+
+group :test do
+  gem "simplecov", require: false
+  gem "capybara"
+  gem "selenium-webdriver"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "bullet"
 end
