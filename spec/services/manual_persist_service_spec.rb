@@ -9,7 +9,7 @@ RSpec.describe ManualPersistService, type: :service do
       it "manualとmanual_ai_textsが新規作成されること" do
         service = ManualPersistService.new(user)
 
-        expect { service.call(result) }.to change { user.manuals.count }.by(1)
+        expect { service.call(:default, result) }.to change { user.manuals.count }.by(1)
 
         manual = user.manuals.find_by(theme: :default)
         basic_spec = manual.manual_ai_texts.find_by(section_type: :basic_spec)
@@ -28,7 +28,7 @@ RSpec.describe ManualPersistService, type: :service do
 
         service = ManualPersistService.new(user)
 
-        expect { service.call(result) }.not_to change { user.manuals.count }
+        expect { service.call(:default, result) }.not_to change { user.manuals.count }
 
         manual.reload
         basic_spec = manual.manual_ai_texts.find_by(section_type: :basic_spec)

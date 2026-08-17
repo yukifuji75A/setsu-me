@@ -9,11 +9,11 @@ Rails.application.routes.draw do
 
   resources :manuals, only: [ :show ] do
     collection do
-      get   :step1
-      post  :step1
-      get   :step2
-      get   :step3
-      post  :step3, action: :step3_save
+      get   "step1/:theme", action: :step1, as: :step1
+      post  "step1/:theme", action: :step1
+      get   "step2/:theme", action: :step2, as: :step2
+      get   "step3/:theme", action: :step3, as: :step3
+      post  "step3/:theme", action: :step3_save
     end
   end
 

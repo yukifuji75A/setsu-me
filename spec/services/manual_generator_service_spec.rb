@@ -19,7 +19,7 @@ RSpec.describe ManualGeneratorService, type: :service do
 
   describe "#call" do
     it "OpenAIのレスポンスをパースしてbasic_specとhandling_guideを返すこと" do
-      service = ManualGeneratorService.new(user)
+      service = ManualGeneratorService.new(user, "default")
 
       result = service.call
 
@@ -39,7 +39,7 @@ RSpec.describe ManualGeneratorService, type: :service do
       default_text_question = create(:question, theme: :default, position: 2, title: "落ち着く環境", answer_type: :text)
       create(:answer, :text, user: user, question: default_text_question, body: "静かなカフェ")
 
-      service = ManualGeneratorService.new(user)
+      service = ManualGeneratorService.new(user, "default")
       service.call
 
       user_message = captured_parameters[:messages].find { |m| m[:role] == "user" }[:content]

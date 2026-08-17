@@ -11,7 +11,7 @@ RSpec.describe "Manuals", type: :request do
   describe "GET /manuals/step1" do
     context "共通情報が未入力の場合" do
       it "common-answersの入力画面にリダイレクトされること" do
-        get step1_manuals_path
+        get step1_manuals_path(theme: "default")
 
         expect(response).to redirect_to(edit_common_answers_path)
       end
@@ -24,7 +24,7 @@ RSpec.describe "Manuals", type: :request do
       end
 
       it "200が返ること" do
-        get step1_manuals_path
+        get step1_manuals_path(theme: "default")
 
         expect(response).to have_http_status(:ok)
       end
@@ -41,16 +41,16 @@ RSpec.describe "Manuals", type: :request do
 
     context "全ての質問に回答している場合" do
       it "step2にリダイレクトされ、回答が保存されること" do
-        post step1_manuals_path, params: { answers: { default_question.id.to_s => { body: "テスト回答" } } }
+        post step1_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "テスト回答" } } }
 
-        expect(response).to redirect_to(step2_manuals_path)
+        expect(response).to redirect_to(step2_manuals_path(theme: "default"))
         expect(user.answers.find_by(question: default_question).body).to eq("テスト回答")
       end
     end
 
     context "未回答の質問がある場合" do
       it "unprocessable_entityでstep1が再描画されること" do
-        post step1_manuals_path, params: { answers: { default_question.id.to_s => { body: "" } } }
+        post step1_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "" } } }
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include("全ての質問に回答してください")
@@ -69,7 +69,7 @@ RSpec.describe "Manuals", type: :request do
       end
 
       it "manualとmanual_ai_textsが作成され、200が返ること" do
-        get step2_manuals_path
+        get step2_manuals_path(theme: "default")
 
         expect(response).to have_http_status(:ok)
         manual = user.manuals.find_by(theme: :default)
@@ -85,9 +85,9 @@ RSpec.describe "Manuals", type: :request do
       end
 
       it "step1にリダイレクトされること" do
-        get step2_manuals_path
+        get step2_manuals_path(theme: "default")
 
-        expect(response).to redirect_to(step1_manuals_path)
+        expect(response).to redirect_to(step1_manuals_path(theme: "default"))
       end
     end
   end
@@ -101,7 +101,7 @@ RSpec.describe "Manuals", type: :request do
       end
 
       it "200が返ること" do
-        get step3_manuals_path
+        get step3_manuals_path(theme: "default")
 
         expect(response).to have_http_status(:ok)
       end
@@ -113,7 +113,7 @@ RSpec.describe "Manuals", type: :request do
       it "manualの詳細ページにリダイレクトされること" do
         manual = create(:manual, user: user, theme: :default)
 
-        post step3_manuals_path
+        post step3_manuals_path(theme: "default")
 
         expect(response).to redirect_to(manual_path(manual))
       end
@@ -121,9 +121,9 @@ RSpec.describe "Manuals", type: :request do
 
     context "manualが存在しない場合" do
       it "step1にリダイレクトされること" do
-        post step3_manuals_path
+        post step3_manuals_path(theme: "default")
 
-        expect(response).to redirect_to(step1_manuals_path)
+        expect(response).to redirect_to(step1_manuals_path(theme: "default"))
       end
     end
   end
