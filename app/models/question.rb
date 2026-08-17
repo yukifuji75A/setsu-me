@@ -40,7 +40,8 @@ class Question < ApplicationRecord
       10 => "対処法①",
       11 => "状況②",
       12 => "対処法②"
-    }
+    },
+    friend: {}
   }.freeze
 
   def display_label
