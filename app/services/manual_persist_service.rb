@@ -3,8 +3,8 @@ class ManualPersistService
     @user = user
   end
 
-  def call(result)
-    manual = @user.manuals.find_or_initialize_by(theme: :default)
+  def call(theme, result)
+    manual = @user.manuals.find_or_initialize_by(theme: theme)
     manual.save!
 
     manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|

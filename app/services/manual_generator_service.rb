@@ -1,6 +1,18 @@
 class ManualGeneratorService
-  def initialize(user)
+  POSITIONS = {
+    "default" => {
+      introduction: [ 1, 3 ],
+      analysis: (1..12).to_a
+    },
+    "friend" => {
+      introduction: [ 1, 2, 3, 4, 5, 10, 11 ],
+      analysis: (1..15).to_a
+    }
+  }.freeze
+
+  def initialize(user, theme)
     @user = user
+    @theme = theme
   end
 
   def call
@@ -102,14 +114,14 @@ class ManualGeneratorService
 
   def introduction_lines
     common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
-    default = answers_for(:default, positions: [ 1, 3 ])
-    format_lines(common + default)
+    theme_answers = answers_for(@theme, positions: POSITIONS[@theme][:introduction])
+    format_lines(common + theme_answers)
   end
 
   def analysis_lines
     common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
-    default = answers_for(:default, positions: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ])
-    format_lines(common + default)
+    theme_answers = answers_for(@theme, positions: POSITIONS[@theme][:analysis])
+    format_lines(common + theme_answers)
   end
 
   def answers_for(theme, positions:)
