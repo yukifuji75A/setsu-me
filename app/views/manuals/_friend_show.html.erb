@@ -1,0 +1,146 @@
+<%# ヘッダー %>
+<div class="pt-8 pb-6">
+  <p class="text-xs text-gray-400 tracking-widest mb-1">取扱説明書</p>
+  <h1 class="text-2xl font-bold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">
+    <%= @profile.name %>
+  </h1>
+  <p class="text-xs text-gray-600 mt-1 tracking-widest">型番：<%= manual_serial_number(@manual) %></p>
+  <div class="mt-3 h-px bg-gradient-to-r from-sky-400 to-blue-500 opacity-50"></div>
+</div>
+
+<div class="space-y-6 mb-8">
+
+  <%# 第1章 %>
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第1章</span>
+      <span class="text-sm font-semibold text-gray-900">製品概要</span>
+    </div>
+    <div class="bg-white border-2 border-sky-400 rounded-2xl p-4">
+      <p class="text-sm leading-relaxed text-gray-900"><%= @basic_spec&.ai_text %></p>
+    </div>
+  </div>
+
+  <%# 第2章 %>
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第2章</span>
+      <span class="text-sm font-semibold text-gray-900">製品仕様</span>
+    </div>
+    <div class="flex gap-3">
+      <%# 基本仕様カード %>
+      <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4">
+        <p class="text-xs text-gray-800 mb-2">基本仕様</p>
+        <dl class="space-y-2 text-xs">
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">製造年</dt>
+            <dd class="text-gray-900 font-medium"><%= @profile.birthday.year %>年</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">製造地</dt>
+            <dd class="text-gray-900 font-medium"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">モデル属性</dt>
+            <dd class="text-gray-900 font-medium"><%= @profile.zodiac_sign %></dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">内部規格</dt>
+            <dd class="text-gray-900 font-medium"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">開発履歴</dt>
+            <dd class="text-gray-900 font-medium"><%= t("enums.profile.education.#{@profile.education}") %></dd>
+          </div>
+        </dl>
+      </div>
+      <%# 性能カード %>
+      <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4">
+        <p class="text-xs text-gray-800 mb-2">性能</p>
+        <div class="flex flex-wrap gap-1.5">
+          <% @common_answers.select { |a| [1, 2, 3, 4, 5].include?(a.question.position) }.each do |answer| %>
+            <% values = answer.question.selection? ? [answer.question_option&.label] : answer.body.to_s.split(/[、,，]/).map(&:strip) %>
+            <% values.compact_blank.each do |val| %>
+              <span class="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">
+                <%= val %>
+              </span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# 第3章 %>
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第3章</span>
+      <span class="text-sm font-semibold text-gray-900">人間関係・距離感</span>
+    </div>
+    <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
+      <dl class="divide-y divide-sky-100 text-sm">
+        <% @theme_answers.select { |a| [1, 2, 3, 4, 5, 13, 14].include?(a.question.position) }.each do |answer| %>
+          <div class="flex gap-4 px-4 py-3">
+            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
+            <dd class="text-gray-900 text-xs flex-1">
+              <%= answer.question_option&.label %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+  <%# 第4章 %>
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第4章</span>
+      <span class="text-sm font-semibold text-gray-900">好きなもの・一緒に楽しめること</span>
+    </div>
+    <div class="bg-white border-2 border-sky-400 rounded-2xl p-4 space-y-4">
+      <% [
+        { emoji: "🍽️", label: "食べ物・飲み", positions: [7, 8] },
+        { emoji: "🎬", label: "エンタメ", positions: [9, 10] },
+        { emoji: "🏃", label: "アクティビティ", positions: [11, 12] },
+        { emoji: "🏠or🏕️", label: "インドア・アウトドア", positions: [6] }
+      ].each do |category| %>
+        <% values = @theme_answers.select { |a| category[:positions].include?(a.question.position) }.filter_map { |a| a.question_option&.label } %>
+        <% next if values.empty? %>
+        <div>
+          <p class="text-xs text-gray-400 mb-2"><%= category[:emoji] %> <%= category[:label] %></p>
+          <div class="flex flex-wrap gap-2">
+            <% values.each do |val| %>
+              <span class="text-xs px-3 py-1.5 rounded-full bg-sky-50 text-sky-600 border border-sky-100">
+                <%= val %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# 第5章 %>
+  <div>
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第5章</span>
+      <span class="text-sm font-semibold text-gray-900">友だちとの付き合い方</span>
+    </div>
+    <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
+      <dl class="divide-y divide-sky-100 text-sm">
+        <% @theme_answers.select { |a| [15, 16, 17, 18].include?(a.question.position) }.each do |answer| %>
+          <div class="flex gap-4 px-4 py-3">
+            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
+            <dd class="text-gray-900 text-xs flex-1">
+              <%= answer.body %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+</div>
+
+<%= link_to "マイページへ", mypage_path,
+    class: "block w-full py-4 rounded-2xl font-bold text-sm text-center bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:opacity-90 transition-opacity" %>
