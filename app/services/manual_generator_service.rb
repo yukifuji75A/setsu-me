@@ -5,8 +5,8 @@ class ManualGeneratorService
       analysis: (1..12).to_a
     },
     "friend" => {
-      introduction: [ 1, 2, 3, 4, 5, 10, 11 ],
-      analysis: (1..15).to_a
+      introduction: [ 1, 2, 3, 4, 5, 13, 14 ],
+      analysis: (1..18).to_a
     }
   }.freeze
 

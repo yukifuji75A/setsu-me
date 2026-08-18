@@ -175,3 +175,165 @@ Question.find_or_create_by!(theme: :default, position: 12) do |question|
   question.title = "Q11で選んだ状況のとき、どのように接してもらえると嬉しいですか？"
   question.answer_type = :text
 end
+
+# ====================
+# 友だち追加情報（theme: :friend）
+# ====================
+
+# Q1: 仲良くなるまでの感じ
+q = Question.find_or_create_by!(theme: :friend, position: 1) do |question|
+  question.title = "仲良くなるまでどんな感じ？"
+  question.answer_type = :selection
+end
+[
+  "すぐ仲良くなる", "自然と仲良くなる", "仲良くなるまで時間がかかる"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q2: 連絡の頻度
+q = Question.find_or_create_by!(theme: :friend, position: 2) do |question|
+  question.title = "連絡はどのくらい取りたい？"
+  question.answer_type = :selection
+end
+[
+  "こまめに取りたい", "適度に取りたい", "少なくても平気", "用があるときだけでOK"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q3: 遊ぶ頻度
+q = Question.find_or_create_by!(theme: :friend, position: 3) do |question|
+  question.title = "どのくらいの頻度で遊びたい？"
+  question.answer_type = :selection
+end
+[
+  "週に1回くらい", "月に2〜3回", "2〜3か月に1回", "たまに遊べればOK"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q4: 遊ぶ人数
+q = Question.find_or_create_by!(theme: :friend, position: 4) do |question|
+  question.title = "遊ぶときの人数は？"
+  question.answer_type = :selection
+end
+[
+  "大人数でもOK", "少人数が好き", "1対1が好き"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q5: 急なお誘い
+q = Question.find_or_create_by!(theme: :friend, position: 5) do |question|
+  question.title = "急なお誘いはアリ？"
+  question.answer_type = :selection
+end
+[
+  "全然OK", "内容による", "ちょっと苦手"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q6: インドア・アウトドア
+q = Question.find_or_create_by!(theme: :friend, position: 6) do |question|
+  question.title = "インドア派？アウトドア派？"
+  question.answer_type = :selection
+end
+[
+  "インドア派", "アウトドア派", "どちらも好き"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q7・Q8: 好きな食べ物・飲み物
+food_drink_options = [
+  "肉料理", "麺類", "韓国料理", "魚料理", "ごはん・丼もの",
+  "パン・サンドイッチ", "ファストフード・ジャンクフード", "スイーツ",
+  "コーヒー", "紅茶・お茶", "ジュース・炭酸飲料", "お酒", "特にない"
+]
+[ 7, 8 ].each do |position|
+  q = Question.find_or_create_by!(theme: :friend, position: position) do |question|
+    question.title = "好きな食べ物・飲み物は？"
+    question.answer_type = :selection
+  end
+  food_drink_options.each_with_index do |label, i|
+    q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+  end
+end
+
+# Q9・Q10: 好きなエンタメ
+entertainment_options = [
+  "映画", "ドラマ", "アニメ", "漫画", "音楽", "ライブ",
+  "ゲーム", "YouTube・動画", "演劇", "お笑い", "スポーツ中継"
+]
+[ 9, 10 ].each do |position|
+  q = Question.find_or_create_by!(theme: :friend, position: position) do |question|
+    question.title = "好きなエンタメは？"
+    question.answer_type = :selection
+  end
+  entertainment_options.each_with_index do |label, i|
+    q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+  end
+end
+
+# Q11・Q12: 好きな遊び・お出かけ
+outing_options = [
+  "旅行", "ドライブ", "温泉", "登山", "海", "キャンプ",
+  "カラオケ", "ショッピング", "食べ歩き", "推し活", "スポーツ観戦", "遊園地・テーマパーク"
+]
+[ 11, 12 ].each do |position|
+  q = Question.find_or_create_by!(theme: :friend, position: position) do |question|
+    question.title = "好きな遊び・お出かけは？"
+    question.answer_type = :selection
+  end
+  outing_options.each_with_index do |label, i|
+    q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+  end
+end
+
+# Q13: 誘う・誘われる
+q = Question.find_or_create_by!(theme: :friend, position: 13) do |question|
+  question.title = "遊ぶときは誘う？誘われたい？"
+  question.answer_type = :selection
+end
+[
+  "自分から誘う", "誘ってほしい", "どちらも"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q14: 一人の時間と友だちとの時間
+q = Question.find_or_create_by!(theme: :friend, position: 14) do |question|
+  question.title = "一人の時間と友だちとの時間、どっちが大事？"
+  question.answer_type = :selection
+end
+[
+  "一人の時間が大事", "友だちとの時間が大事", "どちらも大事"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q15: 悩み相談
+Question.find_or_create_by!(theme: :friend, position: 15) do |question|
+  question.title = "悩み相談したとき、どうしてほしい？"
+  question.answer_type = :text
+end
+
+# Q16: 意見が合わないとき
+Question.find_or_create_by!(theme: :friend, position: 16) do |question|
+  question.title = "意見が合わないとき、どうする？"
+  question.answer_type = :text
+end
+
+# Q17: 友だち関係で大事にしていること
+Question.find_or_create_by!(theme: :friend, position: 17) do |question|
+  question.title = "友だち関係で大事にしていることは？"
+  question.answer_type = :text
+end
+
+# Q18: 仲良くなるとどうなる
+Question.find_or_create_by!(theme: :friend, position: 18) do |question|
+  question.title = "仲良くなるとどうなる？"
+  question.answer_type = :text
+end
