@@ -128,6 +128,31 @@
         </div>
       <% end %>
     </section>
+
+    <section class="mb-6">
+      <h2 class="text-xs text-dark-muted uppercase tracking-wider mb-3">トリセツ</h2>
+      <div class="space-y-3">
+        <% MypageController::THEMES.each do |theme| %>
+          <% style = theme_card_style(theme) %>
+          <% manual = @manuals_by_theme[theme] %>
+          <div class="bg-dark-card rounded-2xl p-4 border <%= style[:border] %>">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-semibold text-white"><%= style[:label] %></p>
+                <p class="text-xs text-dark-muted mt-0.5"><%= style[:description] %></p>
+              </div>
+              <% if manual %>
+                <%= link_to "見る", manual_path(manual),
+                    class: "shrink-0 px-4 py-2 rounded-full text-xs font-bold text-white text-center bg-gradient-to-r #{style[:gradient]} hover:opacity-90 transition-opacity" %>
+              <% else %>
+                <%= link_to "作る", step1_manuals_path(theme: theme),
+                    class: "shrink-0 px-4 py-2 rounded-full text-xs font-bold text-white text-center bg-gradient-to-r #{style[:gradient]} hover:opacity-90 transition-opacity" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
   </div>
 
   <%# AI分析タブ %>
@@ -141,14 +166,9 @@
           </p>
         </div>
       </section>
-
-      <%= link_to "トリセツを見る", manual_path(@manual),
-          class: "block w-full py-3 rounded-2xl text-sm font-bold text-center bg-gradient-to-r from-accent-purple to-accent-pink text-white hover:opacity-90 transition-opacity" %>
     <% else %>
       <div class="text-center py-12">
-        <p class="text-dark-muted text-sm mb-6">まだトリセツが作られていません。</p>
-        <%= link_to "トリセツを作る", step1_manuals_path(theme: "default"),
-            class: "inline-block py-4 px-8 rounded-2xl font-bold text-white text-sm bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity" %>
+        <p class="text-dark-muted text-sm">基本情報タブからトリセツを作成してください。</p>
       </div>
     <% end %>
   </div>

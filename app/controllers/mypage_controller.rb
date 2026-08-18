@@ -1,4 +1,6 @@
 class MypageController < ApplicationController
+  THEMES = %w[default friend].freeze
+
   def show
     @profile = current_user.profile
     @common_answers = current_user.answers
@@ -7,5 +9,6 @@ class MypageController < ApplicationController
                                   .includes(:question, :question_option)
                                   .sort_by { |a| a.question.position }
     @manual = current_user.manuals.find_by(theme: :default)
+    @manuals_by_theme = current_user.manuals.where(theme: THEMES).index_by(&:theme)
   end
 end
