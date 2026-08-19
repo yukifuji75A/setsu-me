@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       get   "step2/:theme", action: :step2, as: :step2
       get   "step3/:theme", action: :step3, as: :step3
       post  "step3/:theme", action: :step3_save
+      get   "edit/:theme", action: :edit, as: :edit
+      patch "edit/:theme", action: :update
     end
   end
 
