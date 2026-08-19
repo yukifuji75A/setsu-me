@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "share/:share_token", to: "shared_manuals#show", as: :shared_manual
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "mypage#show"

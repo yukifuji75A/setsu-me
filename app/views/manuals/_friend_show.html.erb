@@ -142,5 +142,8 @@
 
 </div>
 
-<%= link_to "マイページへ", mypage_path,
-    class: "block w-full py-4 rounded-2xl font-bold text-sm text-center bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:opacity-90 transition-opacity" %>
+<% if local_assigns.fetch(:show_footer_link, false) %>
+  <%= render "manuals/share_url", manual: @manual %>
+  <%= link_to "マイページへ", mypage_path,
+      class: "block w-full py-4 rounded-2xl font-bold text-sm text-center bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:opacity-90 transition-opacity" %>
+<% end %>
