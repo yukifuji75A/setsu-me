@@ -48,5 +48,23 @@ RSpec.describe ManualGeneratorService, type: :service do
       expect(user_message).to include("落ち着く環境：静かなカフェ")
       expect(user_message).not_to include("対象外の質問")
     end
+
+    it "friendテーマの回答がテーマ・positionで絞り込まれてプロンプトに含まれること" do
+      friend_question = create(:question, theme: :friend, position: 14, title: "一人の時間と友だちとの時間", answer_type: :selection)
+      friend_option = create(:question_option, question: friend_question, label: "どちらも大事")
+      create(:answer, :selection, user: user, question: friend_question, question_option: friend_option)
+
+      excluded_default_question = create(:question, theme: :default, position: 1, title: "対象外の質問")
+      excluded_option = create(:question_option, question: excluded_default_question)
+      create(:answer, :selection, user: user, question: excluded_default_question, question_option: excluded_option)
+
+      service = ManualGeneratorService.new(user, "friend")
+      service.call
+
+      user_message = captured_parameters[:messages].find { |m| m[:role] == "user" }[:content]
+
+      expect(user_message).to include("一人の時間と友だちとの時間：どちらも大事")
+      expect(user_message).not_to include("対象外の質問")
+    end
   end
 end

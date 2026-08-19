@@ -28,6 +28,12 @@ RSpec.describe "Manuals", type: :request do
 
         expect(response).to have_http_status(:ok)
       end
+
+      it "friendテーマでも200が返ること" do
+        get step1_manuals_path(theme: "friend")
+
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
@@ -56,6 +62,17 @@ RSpec.describe "Manuals", type: :request do
         expect(response.body).to include("全ての質問に回答してください")
       end
     end
+
+    context "friendテーマで全ての質問に回答している場合" do
+      let!(:friend_question) { create(:question, theme: :friend, answer_type: :text) }
+
+      it "step2にリダイレクトされ、回答が保存されること" do
+        post step1_manuals_path(theme: "friend"), params: { answers: { friend_question.id.to_s => { body: "友だちのテスト回答" } } }
+
+        expect(response).to redirect_to(step2_manuals_path(theme: "friend"))
+        expect(user.answers.find_by(question: friend_question).body).to eq("友だちのテスト回答")
+      end
+    end
   end
 
   describe "GET /manuals/step2" do
@@ -73,6 +90,14 @@ RSpec.describe "Manuals", type: :request do
 
         expect(response).to have_http_status(:ok)
         manual = user.manuals.find_by(theme: :default)
+        expect(manual.manual_ai_texts.find_by(section_type: :basic_spec).ai_text).to eq("製品概要の文章")
+      end
+
+      it "friendテーマでもmanualとmanual_ai_textsが作成され、200が返ること" do
+        get step2_manuals_path(theme: "friend")
+
+        expect(response).to have_http_status(:ok)
+        manual = user.manuals.find_by(theme: :friend)
         expect(manual.manual_ai_texts.find_by(section_type: :basic_spec).ai_text).to eq("製品概要の文章")
       end
     end
@@ -102,6 +127,20 @@ RSpec.describe "Manuals", type: :request do
 
       it "200が返ること" do
         get step3_manuals_path(theme: "default")
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "friendテーマでmanualが存在する場合" do
+      before do
+        manual = create(:manual, user: user, theme: :friend)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+        create(:manual_ai_text, manual: manual, section_type: :handling_guide)
+      end
+
+      it "200が返ること" do
+        get step3_manuals_path(theme: "friend")
 
         expect(response).to have_http_status(:ok)
       end
@@ -137,6 +176,18 @@ RSpec.describe "Manuals", type: :request do
         get manual_path(manual)
 
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "friendテーマのmanualを閲覧する場合" do
+      it "200が返り、friend専用の章立てが表示されること" do
+        manual = create(:manual, user: user, theme: :friend)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get manual_path(manual)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("人間関係・距離感")
       end
     end
 
