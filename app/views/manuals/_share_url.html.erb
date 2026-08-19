@@ -1,0 +1,12 @@
+<div class="mb-4" data-controller="copy-to-clipboard" data-copy-to-clipboard-copied-label-value="コピーしました">
+  <p class="text-xs text-gray-400 mb-2">共有URL</p>
+  <div class="flex gap-2">
+    <input type="text" readonly value="<%= shared_manual_url(share_token: manual.share_token) %>"
+        data-copy-to-clipboard-target="source"
+        class="flex-1 min-w-0 text-xs px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-600 truncate">
+    <button type="button" data-action="copy-to-clipboard#copy"
+        class="shrink-0 text-xs font-bold px-4 py-2.5 rounded-xl bg-gray-900 text-white hover:opacity-90 transition-opacity">
+      <span data-copy-to-clipboard-target="label">コピー</span>
+    </button>
+  </div>
+</div>
