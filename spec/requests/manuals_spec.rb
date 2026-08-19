@@ -167,6 +167,67 @@ RSpec.describe "Manuals", type: :request do
     end
   end
 
+  describe "GET /manuals/edit" do
+    before do
+      common_question = create(:question, theme: :common, answer_type: :text)
+      create(:answer, :text, user: user, question: common_question)
+    end
+
+    it "200が返ること" do
+      get edit_manuals_path(theme: "default")
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "friendテーマでも200が返ること" do
+      get edit_manuals_path(theme: "friend")
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe "PATCH /manuals/edit" do
+    before do
+      common_question = create(:question, theme: :common, answer_type: :text)
+      create(:answer, :text, user: user, question: common_question)
+    end
+
+    let!(:default_question) { create(:question, theme: :default, answer_type: :text) }
+
+    context "全ての質問に回答している場合" do
+      it "mypageにリダイレクトされ、回答が更新されること" do
+        create(:answer, :text, user: user, question: default_question, body: "編集前の回答")
+
+        patch edit_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "編集後の回答" } } }
+
+        expect(response).to redirect_to(mypage_path)
+        expect(user.answers.find_by(question: default_question).body).to eq("編集後の回答")
+      end
+    end
+
+    context "未回答の質問がある場合" do
+      it "unprocessable_entityでeditが再描画されること" do
+        patch edit_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "" } } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include("全ての質問に回答してください")
+      end
+    end
+
+    context "friendテーマで全ての質問に回答している場合" do
+      let!(:friend_question) { create(:question, theme: :friend, answer_type: :text) }
+
+      it "mypageにリダイレクトされ、回答が更新されること" do
+        create(:answer, :text, user: user, question: friend_question, body: "編集前の友だち回答")
+
+        patch edit_manuals_path(theme: "friend"), params: { answers: { friend_question.id.to_s => { body: "編集後の友だち回答" } } }
+
+        expect(response).to redirect_to(mypage_path)
+        expect(user.answers.find_by(question: friend_question).body).to eq("編集後の友だち回答")
+      end
+    end
+  end
+
   describe "GET /manuals/:id" do
     context "自分のmanualを閲覧する場合" do
       it "200が返ること" do
