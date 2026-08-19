@@ -1,8 +1,8 @@
 class ManualsController < ApplicationController
   include AnswerInputRestorable
 
-  layout "input", only: [ :step1, :step2, :step3, :show ]
-  before_action :set_theme, only: [ :step1, :step2, :step3, :step3_save ]
+  layout "input", only: [ :step1, :step2, :step3, :show, :edit ]
+  before_action :set_theme, only: [ :step1, :step2, :step3, :step3_save, :edit, :update ]
 
   def step1
     if current_user.answers.joins(:question).where(questions: { theme: :common }).empty?
@@ -55,6 +55,24 @@ class ManualsController < ApplicationController
     @common_answers = common_answers_for(current_user)
     @theme_answers = current_user.answers.for_theme(@manual.theme).sort_by { |a| a.question.position }
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
+  end
+
+  def edit
+    @questions = Question.where(theme: @theme).order(:position).includes(:question_options)
+    @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
+  end
+
+  def update
+    @questions = Question.where(theme: @theme).order(:position).includes(:question_options)
+
+    if AnswerSaveService.new(current_user, @questions, answer_params).call
+      redirect_to mypage_path, notice: "更新しました"
+    else
+      @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
+      restore_answer_inputs(@questions, @answers, answer_params)
+      flash.now[:alert] = "全ての質問に回答してください"
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
