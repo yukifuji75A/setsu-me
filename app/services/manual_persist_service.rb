@@ -12,9 +12,11 @@ class ManualPersistService
       t.save!
     end
 
-    manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
-      t.ai_text = result[:handling_guide]
-      t.save!
+    if result[:handling_guide]
+      manual.manual_ai_texts.find_or_initialize_by(section_type: :handling_guide).tap do |t|
+        t.ai_text = result[:handling_guide]
+        t.save!
+      end
     end
 
     manual
