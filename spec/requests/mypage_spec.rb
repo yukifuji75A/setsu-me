@@ -21,6 +21,27 @@ RSpec.describe "Mypage", type: :request do
 
         expect(response.body).to include(edit_account_path)
       end
+
+      context "トリセツが未作成の場合" do
+        it "テーマごとに作るリンクが表示されること" do
+          get mypage_path
+
+          expect(response.body).to include(step1_manuals_path(theme: "default"))
+          expect(response.body).to include(step1_manuals_path(theme: "friend"))
+        end
+      end
+
+      context "friendテーマのトリセツのみ作成済みの場合" do
+        it "friendは見るリンク、defaultは作るリンクが表示されること" do
+          manual = create(:manual, user: user, theme: :friend)
+
+          get mypage_path
+
+          expect(response.body).to include(manual_path(manual))
+          expect(response.body).not_to include(step1_manuals_path(theme: "friend"))
+          expect(response.body).to include(step1_manuals_path(theme: "default"))
+        end
+      end
     end
 
     context "LINE登録ユーザーの場合" do
