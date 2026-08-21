@@ -72,7 +72,7 @@
         <h2 class="text-xs text-dark-muted uppercase tracking-wider">プロフィール</h2>
         <%= link_to "編集", edit_profile_path, class: "text-xs text-accent-purple hover:underline" %>
       </div>
-      <div class="bg-dark-card rounded-2xl p-4 space-y-3 text-sm">
+      <div class="bg-dark-card border border-dark-muted/20 rounded-2xl p-4 space-y-3 text-sm">
         <div class="flex gap-4">
           <span class="w-20 text-dark-muted">名前</span>
           <span><%= @profile.name %></span>
@@ -108,7 +108,7 @@
       </div>
 
       <% if @common_answers.any? %>
-        <div class="bg-dark-card rounded-2xl p-4 space-y-4 text-sm">
+        <div class="bg-dark-card border border-dark-muted/20 rounded-2xl p-4 space-y-4 text-sm">
           <% @common_answers.each do |answer| %>
             <div>
               <p class="text-dark-muted text-xs mb-1"><%= answer.question.display_label %></p>
@@ -123,7 +123,7 @@
           <% end %>
         </div>
       <% else %>
-        <div class="bg-dark-card rounded-2xl p-4 text-sm text-dark-muted text-center">
+        <div class="bg-dark-card border border-dark-muted/20 rounded-2xl p-4 text-sm text-dark-muted text-center">
           まだ回答していません。
         </div>
       <% end %>
@@ -144,7 +144,7 @@
               <% if manual %>
                 <div class="flex items-center gap-3 shrink-0">
                   <%= link_to "編集", edit_manuals_path(theme: theme),
-                      class: "text-xs #{style[:text]} hover:underline" %>
+                      class: "shrink-0 px-4 py-2 rounded-full text-xs font-bold text-center border-2 #{style[:border]} text-white hover:opacity-70 transition-opacity" %>
                   <%= link_to "見る", manual_path(manual),
                       class: "shrink-0 px-4 py-2 rounded-full text-xs font-bold text-white text-center bg-gradient-to-r #{style[:gradient]} hover:opacity-90 transition-opacity" %>
                 </div>
@@ -163,7 +163,7 @@
   <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
     <% if @manual %>
       <section class="mb-4">
-        <div class="bg-dark-card rounded-2xl p-4">
+        <div class="bg-dark-card border border-dark-muted/20 rounded-2xl p-4">
           <p class="text-xs text-dark-muted mb-2">AI分析レポート</p>
           <p class="text-sm leading-relaxed whitespace-pre-line">
             <%= @manual.manual_ai_texts.find_by(section_type: :handling_guide)&.ai_text %>

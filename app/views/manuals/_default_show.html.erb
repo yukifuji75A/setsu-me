@@ -37,16 +37,16 @@
             <dd class="text-gray-900 font-medium"><%= @profile.birthday.year %>年</dd>
           </div>
           <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">製造地</dt>
-            <dd class="text-gray-900 font-medium"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
-          </div>
-          <div class="flex gap-2">
             <dt class="w-16 text-gray-400 shrink-0">モデル属性</dt>
             <dd class="text-gray-900 font-medium"><%= @profile.zodiac_sign %></dd>
           </div>
           <div class="flex gap-2">
             <dt class="w-16 text-gray-400 shrink-0">内部規格</dt>
             <dd class="text-gray-900 font-medium"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-16 text-gray-400 shrink-0">製造地</dt>
+            <dd class="text-gray-900 font-medium"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
           </div>
           <div class="flex gap-2">
             <dt class="w-16 text-gray-400 shrink-0">開発履歴</dt>
@@ -58,7 +58,10 @@
       <div class="flex-1 bg-white border-2 border-violet-500 rounded-2xl p-4">
         <p class="text-xs text-gray-800 mb-2">性能</p>
         <div class="flex flex-wrap gap-1.5">
-          <% @common_answers.select { |a| [1, 2, 3, 4, 5].include?(a.question.position) }.each do |answer| %>
+          <%# 性格系（性格ワード・MBTI・思考タイプ・行動タイプ）を先に、趣味を最後に表示 %>
+          <% [1, 2, 4, 5, 3].each do |position| %>
+            <% answer = @common_answers.find { |a| a.question.position == position } %>
+            <% next unless answer %>
             <% values = answer.question.selection? ? [answer.question_option&.label] : answer.body.to_s.split(/[、,，]/).map(&:strip) %>
             <% values.compact_blank.each do |val| %>
               <span class="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink text-white">
