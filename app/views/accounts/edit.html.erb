@@ -3,7 +3,7 @@
   <p class="text-sm text-gray-400">メールアドレス・パスワードを変更できます</p>
 </div>
 
-<%= form_with model: @user, url: account_path, method: :patch, data: { turbo: false } do |f| %>
+<%= form_with model: @user, url: account_path, method: :patch do |f| %>
   <% if @user.errors.any? %>
     <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl">
       <% @user.errors.full_messages.each do |msg| %>
