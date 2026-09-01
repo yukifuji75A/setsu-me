@@ -3,7 +3,7 @@
   <p class="text-sm text-gray-400">あなたの取扱い方法を教えてください。全<%= @questions.size %>問です。</p>
 </div>
 
-<%= form_with url: edit_manuals_path(theme: @theme), method: :patch, data: { turbo: false } do |f| %>
+<%= form_with url: edit_manuals_path(theme: @theme), method: :patch do |f| %>
   <div class="space-y-6 mb-8">
     <% @questions.each do |question| %>
       <% answer = @answers[question.id] %>
