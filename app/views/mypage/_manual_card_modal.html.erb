@@ -1,0 +1,47 @@
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center" data-card-modal-target="modal">
+  <div class="absolute inset-0 bg-black/60" data-action="click->card-modal#close"></div>
+  <div class="relative w-[280px] rounded-2xl" style="background: <%= style[:border_gradient] %>; padding: 2px; box-shadow: <%= style[:glow_shadow] %>;">
+    <div class="bg-dark-bg rounded-[14px] pt-[22px] px-5 pb-[18px]">
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="w-[34px] h-[34px] rounded-xl bg-[#23213a] flex items-center justify-center shrink-0">
+          <%= render "mypage/manual_card_icon", icon: style[:icon] %>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[15px] font-bold text-white truncate">
+            <%= manual ? style[:title] : "トリセツを作成しますか？" %>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2.5">
+        <% if manual %>
+          <button type="button"
+              class="h-11 rounded-xl text-sm font-bold text-white hover:opacity-90 transition-opacity"
+              style="background: <%= style[:border_gradient] %>;"
+              data-action="click->card-modal#visit"
+              data-url="<%= manual_path(manual) %>">
+            閲覧・共有する
+          </button>
+          <button type="button"
+              class="h-11 rounded-xl text-sm font-bold text-white border border-dark-muted/40 hover:bg-white/5 transition-colors"
+              data-action="click->card-modal#visit"
+              data-url="<%= edit_manuals_path(theme: theme) %>">
+            編集する
+          </button>
+        <% else %>
+          <button type="button"
+              class="h-11 rounded-xl text-sm font-bold text-white hover:opacity-90 transition-opacity"
+              style="background: <%= style[:border_gradient] %>;"
+              data-action="click->card-modal#visit"
+              data-url="<%= step1_manuals_path(theme: theme) %>">
+            作成する
+          </button>
+        <% end %>
+      </div>
+
+      <button type="button" class="block w-full text-center text-xs text-dark-muted mt-4" data-action="click->card-modal#close">
+        キャンセル
+      </button>
+    </div>
+  </div>
+</div>
