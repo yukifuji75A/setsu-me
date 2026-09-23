@@ -107,7 +107,9 @@ class ManualGeneratorService
 
       ・趣味や好きなものは、人物らしさを補足できる場合のみ自然に含める
 
-      ・MBTI・思考タイプ・行動タイプは参考情報の一つとして扱い、それだけで人物像を決めつけない
+      ・MBTI・思考タイプ・行動タイプ・価値観・対人スタンスは参考情報の一つとして扱い、それだけで人物像を決めつけない
+
+      ・MBTIは、タイプ名をそのまま特徴として書かず、そのタイプが一般的に示す思考・行動の傾向を踏まえたうえで、他の回答と組み合わせて分析する
 
       ・「この人はこういう性格」と単純に分類するだけではなく、その性格がどのような考え方や行動につながりやすいのかを意識する
 
@@ -253,7 +255,8 @@ class ManualGeneratorService
       ・推論した内容は事実として断定せず、「〜と考えられます」「〜という傾向がありそうです」などの表現を使う
       ・入力情報に存在しない過去の経験、家庭環境、トラウマ、心理的原因などを創作しない
       ・心理診断や医学的な診断を行わない
-      ・MBTI、思考タイプ、行動タイプは参考情報の一つとして扱い、それだけで人物像を決めつけない
+      ・MBTI、思考タイプ、行動タイプ、価値観、対人スタンスは参考情報の一つとして扱い、それだけで人物像を決めつけない
+      ・MBTIは、タイプ名をそのまま特徴として書かず、そのタイプが一般的に示す思考・行動の傾向を踏まえたうえで、他の回答と組み合わせて分析する
       ・趣味や好きなものは、それだけを性格の根拠にしない。他の回答とつながる場合に、人物像を理解する材料として活用する
       ・すべてのユーザー情報を使用する必要はない。分析に有効な情報を選び、不要な情報は無理に文章へ入れない
       ・文字数を満たすためだけに不要な情報や推測を追加しない
@@ -264,7 +267,7 @@ class ManualGeneratorService
 
       ①【あなたの特徴】
 
-      性格ワード、MBTI、思考タイプ、行動タイプなどを参考にしながら、
+      性格ワード、MBTI、思考タイプ、行動タイプ、価値観などを参考にしながら、
 
       複数の回答を組み合わせ、この人物の中心的な特徴や行動パターンを分析してください。
 
@@ -272,7 +275,7 @@ class ManualGeneratorService
 
       ②【人との関わり方】
 
-      相性のいいタイプ、嬉しい接し方、苦手なタイプ、苦手な接し方などを組み合わせ、
+      対人スタンス、相性のいいタイプ、嬉しい接し方、苦手なタイプ、苦手な接し方などを組み合わせ、
 
       人との距離感やコミュニケーションの特徴を分析してください。
 
@@ -349,13 +352,13 @@ class ManualGeneratorService
   end
 
   def introduction_lines
-    common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
+    common = answers_for(:common, positions: [ 1, 2, 4, 5, 6, 7 ])
     theme_answers = answers_for(@theme, positions: POSITIONS[@theme][:introduction])
     format_lines(common + theme_answers)
   end
 
   def analysis_lines
-    common = answers_for(:common, positions: [ 1, 2, 3, 4, 5 ])
+    common = answers_for(:common, positions: [ 1, 2, 4, 5, 6, 7 ])
     theme_answers = answers_for(@theme, positions: POSITIONS[@theme][:analysis])
     format_lines(common + theme_answers)
   end
