@@ -32,7 +32,7 @@ RSpec.describe ManualGeneratorService, type: :service do
       common_option = create(:question_option, question: common_question, label: "穏やか")
       create(:answer, :selection, user: user, question: common_question, question_option: common_option)
 
-      excluded_common_question = create(:question, theme: :common, position: 6, title: "対象外の質問")
+      excluded_common_question = create(:question, theme: :common, position: 100, title: "対象外の質問")
       excluded_option = create(:question_option, question: excluded_common_question)
       create(:answer, :selection, user: user, question: excluded_common_question, question_option: excluded_option)
 

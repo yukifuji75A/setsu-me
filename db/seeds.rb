@@ -31,12 +31,6 @@ end
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
 
-# Q3: 趣味
-Question.find_or_create_by!(theme: :common, position: 3) do |question|
-  question.title = "あなたの趣味を教えてください"
-  question.answer_type = :text
-end
-
 # Q4: 思考タイプ
 q = Question.find_or_create_by!(theme: :common, position: 4) do |question|
   question.title = "あなたの思考タイプに最も近いものを選んでください"
@@ -55,6 +49,29 @@ q = Question.find_or_create_by!(theme: :common, position: 5) do |question|
 end
 [
   "主導型", "感化型", "安定型", "慎重型"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q6: 価値観
+q = Question.find_or_create_by!(theme: :common, position: 6) do |question|
+  question.title = "あなたが大事にしている価値観を選んでください"
+  question.answer_type = :selection
+end
+[
+  "成長・挑戦", "安定・安心", "自由・自分らしさ", "人との繋がり",
+  "誠実・信頼", "結果・成果", "楽しさ・面白さ", "調和・協調"
+].each_with_index do |label, i|
+  q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
+end
+
+# Q7: 対人スタンス
+q = Question.find_or_create_by!(theme: :common, position: 7) do |question|
+  question.title = "人と関わるときのあなたのスタンスに最も近いものを選んでください"
+  question.answer_type = :selection
+end
+[
+  "傾聴・共感型", "自己主張・発信型", "観察・分析型", "ムードメーカー型"
 ].each_with_index do |label, i|
   q.question_options.find_or_create_by!(position: i + 1) { |o| o.label = label }
 end
