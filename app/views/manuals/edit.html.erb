@@ -3,40 +3,62 @@
   <p class="text-sm text-gray-400">あなたの取扱い方法を教えてください。全<%= @questions.size %>問です。</p>
 </div>
 
-<%= form_with url: edit_manuals_path(theme: @theme), method: :patch do |f| %>
-  <div class="space-y-6 mb-8">
-    <% @questions.each do |question| %>
-      <% answer = @answers[question.id] %>
-      <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
-        <p class="text-xs text-gray-400 mb-1">Q<%= question.position %></p>
-        <p class="font-semibold text-sm mb-3 text-gray-900"><%= question.title %></p>
+<div data-controller="form-dirty" data-action="input->form-dirty#check change->form-dirty#check">
+  <%= form_with url: edit_manuals_path(theme: @theme), method: :patch, data: { "form-dirty-target": "form" } do |f| %>
+    <div class="space-y-6 mb-8">
+      <% @questions.each do |question| %>
+        <% answer = @answers[question.id] %>
+        <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+          <p class="text-xs text-gray-400 mb-1">Q<%= question.position %></p>
+          <p class="font-semibold text-sm mb-3 text-gray-900"><%= question.title %></p>
 
-        <% if question.selection? %>
-          <div class="flex flex-wrap gap-2">
-            <% question.question_options.each do |option| %>
-              <label class="cursor-pointer">
-                <input type="radio"
-                  name="answers[<%= question.id %>][question_option_id]"
-                  value="<%= option.id %>"
-                  <%= answer&.question_option_id == option.id ? "checked" : "" %>
-                  class="hidden peer" %>
-                <span class="inline-block px-3 py-1.5 rounded-full text-xs border border-gray-200 bg-white text-gray-600 peer-checked:bg-accent-purple peer-checked:text-white peer-checked:border-accent-purple transition-colors">
-                  <%= option.label %>
-                </span>
-              </label>
-            <% end %>
-          </div>
+          <% if question.selection? %>
+            <div class="flex flex-wrap gap-2">
+              <% question.question_options.each do |option| %>
+                <label class="cursor-pointer">
+                  <input type="radio"
+                    name="answers[<%= question.id %>][question_option_id]"
+                    value="<%= option.id %>"
+                    <%= answer&.question_option_id == option.id ? "checked" : "" %>
+                    class="hidden peer" %>
+                  <span class="inline-block px-3 py-1.5 rounded-full text-xs border border-gray-200 bg-white text-gray-600 peer-checked:bg-accent-purple peer-checked:text-white peer-checked:border-accent-purple transition-colors">
+                    <%= option.label %>
+                  </span>
+                </label>
+              <% end %>
+            </div>
+          <% else %>
+            <%= text_area_tag "answers[#{question.id}][body]",
+                answer&.body,
+                rows: 3,
+                placeholder: answer_placeholder(@theme, question),
+                class: "w-full border border-gray-200 rounded-xl p-3 text-sm bg-white text-gray-900 placeholder-gray-300 outline-none focus:border-accent-purple transition-colors resize-none" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="space-y-3">
+      <%= f.submit "保存してマイページへ",
+          disabled: true,
+          data: { "form-dirty-target": "submit" },
+          class: "w-full py-4 rounded-2xl font-bold text-white text-sm cursor-pointer bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed" %>
+
+      <% if @manual&.published? %>
+        <% if @manual.regeneration_available? %>
+          <%= f.button "文章を再生成する",
+              type: "submit",
+              formaction: regenerate_manuals_path(theme: @theme),
+              disabled: true,
+              data: { "form-dirty-target": "submit" },
+              class: "w-full py-4 rounded-2xl font-bold text-sm cursor-pointer border-2 border-violet-500 text-violet-500 hover:bg-violet-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" %>
         <% else %>
-          <%= text_area_tag "answers[#{question.id}][body]",
-              answer&.body,
-              rows: 3,
-              placeholder: answer_placeholder(@theme, question),
-              class: "w-full border border-gray-200 rounded-xl p-3 text-sm bg-white text-gray-900 placeholder-gray-300 outline-none focus:border-accent-purple transition-colors resize-none" %>
+          <%= f.button "文章を再生成する（#{@manual.next_regeneration_at.strftime('%m/%d %H:%M')}以降に可能）",
+              type: "button",
+              disabled: true,
+              class: "w-full py-4 rounded-2xl font-bold text-sm border-2 border-gray-200 text-gray-300 cursor-not-allowed" %>
         <% end %>
-      </div>
-    <% end %>
-  </div>
-
-  <%= f.submit "保存してマイページへ",
-      class: "w-full py-4 rounded-2xl font-bold text-white text-sm cursor-pointer bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity" %>
-<% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

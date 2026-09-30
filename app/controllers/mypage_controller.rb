@@ -8,8 +8,8 @@ class MypageController < ApplicationController
                                   .where(questions: { theme: :common })
                                   .includes(:question, :question_option)
                                   .sort_by { |a| a.question.position }
-    @manual = current_user.manuals.find_by(theme: :default)
-    @manuals_by_theme = current_user.manuals.where(theme: THEMES).index_by(&:theme)
+    @manual = current_user.manuals.published.find_by(theme: :default)
+    @manuals_by_theme = current_user.manuals.published.where(theme: THEMES).index_by(&:theme)
     @answered_counts_by_theme = THEMES.index_with do |theme|
       current_user.answers.joins(:question).where(questions: { theme: theme }).count
     end
