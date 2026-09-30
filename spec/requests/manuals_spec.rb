@@ -231,7 +231,7 @@ RSpec.describe "Manuals", type: :request do
   describe "GET /manuals/:id" do
     context "自分のmanualを閲覧する場合" do
       it "200が返ること" do
-        manual = create(:manual, user: user, theme: :default)
+        manual = create(:manual, :published, user: user, theme: :default)
         create(:manual_ai_text, manual: manual, section_type: :basic_spec)
 
         get manual_path(manual)
@@ -242,7 +242,7 @@ RSpec.describe "Manuals", type: :request do
 
     context "friendテーマのmanualを閲覧する場合" do
       it "200が返り、friend専用の章立てが表示されること" do
-        manual = create(:manual, user: user, theme: :friend)
+        manual = create(:manual, :published, user: user, theme: :friend)
         create(:manual_ai_text, manual: manual, section_type: :basic_spec)
 
         get manual_path(manual)
