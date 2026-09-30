@@ -5,6 +5,8 @@ class ManualPersistService
 
   def call(theme, result)
     manual = @user.manuals.find_or_initialize_by(theme: theme)
+    manual.generation_count += 1
+    manual.last_generated_at = Time.current
     manual.save!
 
     manual.manual_ai_texts.find_or_initialize_by(section_type: :basic_spec).tap do |t|

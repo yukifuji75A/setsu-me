@@ -2,7 +2,7 @@ class ManualsController < ApplicationController
   include AnswerInputRestorable
 
   layout "input", only: [ :step1, :step2, :step3, :show, :edit ]
-  before_action :set_theme, only: [ :step1, :step2, :step3, :step3_save, :edit, :update ]
+  before_action :set_theme, only: [ :step1, :step2, :step3, :step3_save, :edit, :update, :regenerate ]
 
   def step1
     if current_user.answers.joins(:question).where(questions: { theme: :common }).empty?
@@ -12,6 +12,7 @@ class ManualsController < ApplicationController
 
     @questions = Question.where(theme: @theme).order(:position).includes(:question_options)
     @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
+    @manual = current_user.manuals.find_by(theme: @theme)
 
     return unless request.post?
 
@@ -25,8 +26,13 @@ class ManualsController < ApplicationController
   end
 
   def step2
-    result = manual_generator_service.call
-    @manual = ManualPersistService.new(current_user).call(@theme, result)
+    @manual = current_user.manuals.find_by(theme: @theme)
+
+    if @manual.nil? || @manual.regeneration_available?
+      result = manual_generator_service.call
+      @manual = ManualPersistService.new(current_user).call(@theme, result)
+    end
+
     @basic_spec = @manual.manual_ai_texts.find_by(section_type: :basic_spec)
     @handling_guide = @manual.manual_ai_texts.find_by(section_type: :handling_guide)
   rescue StandardError
@@ -44,13 +50,14 @@ class ManualsController < ApplicationController
 
   def step3_save
     manual = current_user.manuals.find_by!(theme: @theme)
+    manual.update!(published_at: Time.current, last_generated_at: nil) unless manual.published?
     redirect_to manual_path(manual), notice: "トリセツを発行しました！"
   rescue ActiveRecord::RecordNotFound
     redirect_to step1_manuals_path(theme: @theme), alert: "保存に失敗しました。もう一度お試しください。"
   end
 
   def show
-    @manual = current_user.manuals.find(params[:id])
+    @manual = current_user.manuals.published.find(params[:id])
     @profile = current_user.profile
     @common_answers = common_answers_for(current_user)
     @theme_answers = current_user.answers.for_theme(@manual.theme).sort_by { |a| a.question.position }
@@ -60,6 +67,7 @@ class ManualsController < ApplicationController
   def edit
     @questions = Question.where(theme: @theme).order(:position).includes(:question_options)
     @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
+    @manual = current_user.manuals.find_by(theme: @theme)
   end
 
   def update
@@ -72,6 +80,29 @@ class ManualsController < ApplicationController
       restore_answer_inputs(@questions, @answers, answer_params)
       flash.now[:alert] = "全ての質問に回答してください"
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def regenerate
+    result = ManualRegenerationService.new(current_user, @theme, answer_params).call
+
+    if result.success?
+      redirect_to mypage_path, notice: "文章を再生成しました"
+      return
+    end
+
+    case result.error
+    when :invalid_answers
+      @questions = Question.where(theme: @theme).order(:position).includes(:question_options)
+      @answers = current_user.answers.where(question: @questions).index_by(&:question_id)
+      @manual = current_user.manuals.find_by(theme: @theme)
+      restore_answer_inputs(@questions, @answers, answer_params)
+      flash.now[:alert] = "全ての質問に回答してください"
+      render :edit, status: :unprocessable_entity
+    when :limit_exceeded
+      redirect_to edit_manuals_path(theme: @theme), alert: "文章の再生成は24時間に1回までです。"
+    else
+      redirect_to edit_manuals_path(theme: @theme), alert: "再生成に失敗しました。もう一度お試しください。"
     end
   end
 

@@ -33,7 +33,7 @@ RSpec.describe "Mypage", type: :request do
 
       context "friendテーマのトリセツのみ作成済みの場合" do
         it "friendは見るリンク、defaultは作るリンクが表示されること" do
-          manual = create(:manual, user: user, theme: :friend)
+          manual = create(:manual, :published, user: user, theme: :friend)
 
           get mypage_path
 

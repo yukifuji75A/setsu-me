@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post  "step3/:theme", action: :step3_save
       get   "edit/:theme", action: :edit, as: :edit
       patch "edit/:theme", action: :update
+      patch "regenerate/:theme", action: :regenerate, as: :regenerate
     end
   end
 
