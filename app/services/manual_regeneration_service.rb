@@ -1,5 +1,5 @@
 class ManualRegenerationService
-  Result = Struct.new(:success?, :error, keyword_init: true)
+  Result = Struct.new(:success?, :error, :manual, keyword_init: true)
 
   def initialize(user, theme, answer_params)
     @user = user
@@ -18,9 +18,9 @@ class ManualRegenerationService
     end
 
     result = ManualGeneratorService.new(@user, @theme).call
-    ManualPersistService.new(@user).call(@theme, result)
+    persisted_manual = ManualPersistService.new(@user).call(@theme, result)
 
-    Result.new(success?: true, error: nil)
+    Result.new(success?: true, error: nil, manual: persisted_manual)
   rescue StandardError
     Result.new(success?: false, error: :generation_failed)
   end

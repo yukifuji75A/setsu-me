@@ -87,7 +87,7 @@ class ManualsController < ApplicationController
     result = ManualRegenerationService.new(current_user, @theme, answer_params).call
 
     if result.success?
-      redirect_to mypage_path, notice: "文章を再生成しました"
+      redirect_to manual_path(result.manual), notice: "文章を再生成しました"
       return
     end
 
