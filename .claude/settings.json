@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE '(^|[;&|[:space:]])bundle exec rspec' && ! echo \"$cmd\" | grep -q 'LANG='; then new_cmd=\"LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 $cmd\"; jq -n --arg cmd \"$new_cmd\" '{hookSpecificOutput: {hookEventName: \"PreToolUse\", permissionDecision: \"allow\", updatedInput: {command: $cmd}}}'; fi"
+            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command'); if echo \"$cmd\" | grep -qE '(^|[;&|[:space:]])(bundle exec rspec|bin/rubocop|bundle exec rubocop|bin/brakeman|bundle exec brakeman)' && ! echo \"$cmd\" | grep -q 'LANG='; then new_cmd=\"LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 $cmd\"; jq -n --arg cmd \"$new_cmd\" '{hookSpecificOutput: {hookEventName: \"PreToolUse\", permissionDecision: \"allow\", updatedInput: {command: $cmd}}}'; fi"
           }
         ]
       }
