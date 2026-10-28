@@ -1,0 +1,36 @@
+<% faqs = [
+  { q: "相手も登録が必要ですか？", a: "いいえ。生成した取扱説明書は共有用のURLで公開でき、登録・ログインしていない人にも見てもらえます。" },
+  { q: "どうやって始めますか？", a: "メールアドレスとパスワード、またはLINEアカウントで、登録・ログインできます。" },
+  { q: "AIが書いた文章は、あとから直せますか？", a: "はい。生成された内容は確認画面で見てから進められ、作成後もマイページから編集できます。" },
+  { q: "どんなテーマがありますか？", a: "現在は「デフォルト（取扱説明書）」と「友だち（トリセツ）」の2つです。用途に合わせて、今後も追加していく予定です。" }
+] %>
+
+<section id="faq" class="bg-white">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28 grid lg:grid-cols-12 gap-10 lg:gap-16">
+    <div class="lg:col-span-5">
+      <%= render "pages/top/section_heading", number: "06", label: "FAQ", title: "よくある質問" %>
+      <div class="hidden lg:block mt-6">
+        <p class="text-base leading-loose text-lp-body">データの扱いなどは、利用規約とプライバシーポリシーをご確認ください。</p>
+        <div class="mt-4 flex gap-6 text-sm font-bold">
+          <%= link_to "利用規約", terms_path, class: "text-accent-purple hover:underline" %>
+          <%= link_to "プライバシーポリシー", privacy_path, class: "text-accent-purple hover:underline" %>
+        </div>
+      </div>
+    </div>
+
+    <dl class="lg:col-span-7">
+      <% faqs.each do |faq| %>
+        <div class="border-t border-lp-line-2 py-6">
+          <dt class="flex gap-3 font-bold text-lp-ink">
+            <span class="font-plex-mono text-accent-purple" aria-hidden="true">Q</span>
+            <%= faq[:q] %>
+          </dt>
+          <dd class="mt-3 flex gap-3 text-sm leading-relaxed text-lp-body">
+            <span class="font-plex-mono font-medium text-lp-sub" aria-hidden="true">A</span>
+            <span><%= faq[:a] %></span>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</section>

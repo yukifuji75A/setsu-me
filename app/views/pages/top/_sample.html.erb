@@ -1,0 +1,44 @@
+<%# PC用の画面ができるまでは、PCでもSP版の画像と文言を表示する %>
+<% screens = [
+  { image: "lp/sample_question.png", alt: "質問画面のイメージ", caption: "STEP 01 / 質問",
+    body: "選択式と記述式の質問に、入力を保持しながら答えられます。" },
+  { image: "lp/sample_manual_ch1-2.png", alt: "トリセツ閲覧画面（第1〜2章）のイメージ", caption: "STEP 03 / 第1〜2章",
+    body: "人柄の概要と、基本情報・性格の特徴をまとめます。" },
+  { image: "lp/sample_manual_ch3-5.png", alt: "トリセツ閲覧画面（第3〜5章）のイメージ", caption: "STEP 03 / 第3〜5章",
+    body: "苦手なことや、困ったときの対処まで記載します。" }
+] %>
+<% chapters = [
+  { title: "製品概要", body: "あなたの人柄を、ひと続きの文章で。" },
+  { title: "製品仕様", body: "基本情報と性格の特徴を一覧に。" },
+  { title: "推奨環境", body: "相性のいいタイプや、落ち着く環境。" },
+  { title: "非推奨・注意事項", body: "苦手なタイプや、避けてほしいこと。" },
+  { title: "トラブル対処", body: "こんなときは、こうしてほしい。" }
+] %>
+
+<section id="sample" class="bg-white">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28">
+    <%= render "pages/top/section_heading", number: "03", label: "画面イメージ",
+      title: "回答から、こんなトリセツ（取扱説明書）に仕上がります。" %>
+
+    <ul class="mt-6 lg:mt-14 -mx-5 px-5 lg:mx-0 lg:px-0 pb-4 flex lg:grid lg:grid-cols-3 gap-6 lg:gap-10 overflow-x-auto lg:overflow-visible snap-x snap-mandatory">
+      <% screens.each do |screen| %>
+        <li class="shrink-0 w-[240px] lg:w-auto snap-center">
+          <%= image_tag screen[:image], alt: screen[:alt],
+            class: "mx-auto w-[220px] lg:w-[260px] drop-shadow-[0_20px_32px_rgba(50,30,140,0.18)]" %>
+          <p class="mt-6 font-plex-mono text-xs font-medium tracking-wider text-accent-purple"><%= screen[:caption] %></p>
+          <p class="mt-2 text-sm leading-relaxed text-lp-body"><%= screen[:body] %></p>
+        </li>
+      <% end %>
+    </ul>
+
+    <ol class="mt-14 lg:mt-20 grid lg:grid-cols-5 gap-3 lg:gap-4">
+      <% chapters.each.with_index(1) do |chapter, i| %>
+        <li class="rounded-2xl border border-lp-line bg-lp-bg p-5">
+          <p class="font-plex-mono text-xs font-medium text-accent-purple">第<%= i %>章</p>
+          <h3 class="mt-2 font-bold text-lp-ink"><%= chapter[:title] %></h3>
+          <p class="mt-2 text-sm leading-relaxed text-lp-body"><%= chapter[:body] %></p>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>

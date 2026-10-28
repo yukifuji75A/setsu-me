@@ -1,0 +1,29 @@
+<% points = [
+  { title: "URLひとつで、誰にでも届く", body: "共有URLは、登録・ログインしていない相手にも開いてもらえます。" },
+  { title: "回答同士のつながりまで読む", body: "複数の回答をまとめてAIに渡し、組み合わせや一貫性を考慮した文章にします。" },
+  { title: "マイページで、まとめて管理", body: "プロフィールや共通情報を編集しながら、作成した取扱説明書を一か所で確認・共有できます。" }
+] %>
+
+<section id="why" class="bg-lp-bg bg-lp-grid bg-lp-grid-size">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28 grid lg:grid-cols-12 gap-10 lg:gap-16">
+    <div class="lg:col-span-5">
+      <%= render "pages/top/section_heading", number: "05", label: "こだわり",
+        title: "ただ並べるだけで、終わらせない。" %>
+      <p class="mt-6 text-[15px] lg:text-base leading-loose text-lp-body">
+        回答を項目ごとに並べるのではなく、組み合わせや一貫性まで読み取って、そのまま相手に渡せる文章に仕上げます。
+      </p>
+    </div>
+
+    <ol class="lg:col-span-7">
+      <% points.each.with_index(1) do |point, i| %>
+        <li class="flex gap-5 lg:gap-8 border-t border-lp-line-2 py-6 lg:py-8">
+          <p class="font-plex-mono text-sm font-medium text-accent-purple"><%= format("%02d", i) %></p>
+          <div>
+            <h3 class="text-lg font-bold text-lp-ink"><%= point[:title] %></h3>
+            <p class="mt-2 text-sm leading-relaxed text-lp-body"><%= point[:body] %></p>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>
