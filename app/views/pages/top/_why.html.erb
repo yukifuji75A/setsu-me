@@ -8,7 +8,7 @@
   <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28 grid lg:grid-cols-12 gap-10 lg:gap-16">
     <div class="lg:col-span-5">
       <%= render "pages/top/section_heading", number: "05", label: "こだわり",
-        title: "ただ並べるだけで、終わらせない。" %>
+        title: safe_join([ "ただ並べるだけで", tag.br, "終わらせない。" ]) %>
       <p class="mt-6 text-[15px] lg:text-base leading-loose text-lp-body">
         回答を項目ごとに並べるのではなく、組み合わせや一貫性まで読み取って、そのまま相手に渡せる文章に仕上げます。
       </p>
