@@ -1,0 +1,10 @@
+<footer class="bg-lp-ink">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-10 grid lg:grid-cols-[1fr_auto] gap-6 lg:gap-y-3">
+    <%= render "pages/top/logo", reading: true, dark: true %>
+    <div class="flex gap-6 text-sm text-lp-dark-muted lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center">
+      <%= link_to "利用規約", terms_path, class: "hover:text-white transition-colors" %>
+      <%= link_to "プライバシーポリシー", privacy_path, class: "hover:text-white transition-colors" %>
+    </div>
+    <p class="font-plex-mono text-xs text-lp-dark-muted-2 lg:col-start-1 lg:row-start-2">© 2026 SETSU：Me</p>
+  </div>
+</footer>

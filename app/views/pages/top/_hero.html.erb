@@ -1,0 +1,42 @@
+<section id="top" class="bg-lp-bg bg-lp-grid bg-lp-grid-size">
+  <%= render "pages/top/header" %>
+
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 pt-10 pb-20 lg:pt-16 lg:pb-28 flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-10">
+    <div class="lg:flex-1">
+      <p class="inline-block rounded-full border border-lp-line bg-white px-4 py-1.5 text-xs lg:text-sm font-bold text-accent-purple">
+        自分のことを伝えるのが、苦手な人へ
+      </p>
+
+      <h1 class="mt-6 text-[34px] lg:text-[56px] font-black leading-tight text-lp-ink">
+        うまく言えない私を<br>一冊のトリセツに。
+      </h1>
+
+      <p class="mt-6 text-[15px] lg:text-base leading-loose text-lp-body lg:max-w-[480px]">
+        質問に答えるだけで、AIがあなたの性格や価値観を文章にまとめ、あなた専用のトリセツ（取扱説明書）をつくります。URLを送るだけで、初対面の相手にも自分のことが伝わります。
+      </p>
+
+      <div class="mt-9 flex flex-col sm:flex-row gap-3">
+        <%= link_to new_user_registration_path,
+          class: "inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-purple to-accent-pink px-8 py-4 font-bold text-white hover:opacity-90 transition-opacity" do %>
+          トリセツを作る
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        <% end %>
+        <%= link_to "ログインする →", new_user_session_path,
+          class: "inline-flex items-center justify-center rounded-full border border-lp-line-2 bg-white px-8 py-4 font-bold text-lp-ink hover:border-accent-purple transition-colors" %>
+      </div>
+
+      <p class="mt-4 text-xs lg:text-sm text-lp-sub">メールアドレス、またはLINEアカウントで登録できます。</p>
+    </div>
+
+    <div class="relative mx-auto w-[330px] h-[460px] lg:w-[460px] lg:h-[600px] shrink-0">
+      <%= image_tag "lp/hero_manual.png",
+        alt: "トリセツ閲覧画面のイメージ",
+        class: "absolute right-0 top-0 w-[190px] lg:w-[260px] drop-shadow-[0_24px_40px_rgba(50,30,140,0.18)]" %>
+      <%= image_tag "lp/hero_mypage.png",
+        alt: "マイページ画面のイメージ",
+        class: "absolute left-0 bottom-0 z-10 w-[180px] lg:w-[240px] drop-shadow-[0_24px_40px_rgba(50,30,140,0.25)]" %>
+    </div>
+  </div>
+</section>

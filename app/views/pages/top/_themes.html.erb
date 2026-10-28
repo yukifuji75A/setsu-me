@@ -1,0 +1,40 @@
+<%# 枠線・タイトルの色とアイコンはマイページのテーマカード（theme_card_style）と共通 %>
+<% lp_texts = {
+  "default" => { body: "取扱説明書らしい形式で、あなたの特徴をきちんと整理します。", footer: "デフォルトテーマ／全12項目" },
+  "friend" => { body: "カジュアルな語り口で、素の自分や付き合い方を伝えます。", footer: "友だちテーマ／全12項目" }
+} %>
+
+<section id="themes" class="bg-dark-bg">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28">
+    <%= render "pages/top/section_heading", number: "04", label: "テーマ",
+      title: "使う場面で、書き方が変わる。", dark: true %>
+    <p class="mt-6 text-[15px] lg:text-base leading-loose text-lp-dark-muted lg:max-w-[720px]">
+      テーマごとにAIへの指示を分けているので、同じ「自分」でも、場面に合った視点と文体で伝えられます。性格やMBTIなどの共通情報は、一度答えればどのテーマでも使えます。
+    </p>
+
+    <ul class="mt-10 lg:mt-14 grid lg:grid-cols-3 gap-5 lg:gap-6">
+      <% MypageController::THEMES.each.with_index(1) do |theme, i| %>
+        <% style = theme_card_style(theme) %>
+        <li class="rounded-2xl p-[2px]" style="background: <%= style[:border_gradient] %>; box-shadow: <%= style[:glow_shadow] %>;">
+          <div class="h-full flex flex-col rounded-[14px] bg-lp-dark-card p-7">
+            <p class="font-plex-mono text-xs font-medium text-white">No.<%= format("%02d", i) %></p>
+            <h3 class="mt-5 text-2xl font-black bg-clip-text text-transparent self-start" style="background-image: <%= style[:title_gradient] %>;"><%= style[:title] %></h3>
+            <p class="mt-1 text-sm font-bold text-white"><%= style[:subtext] %></p>
+            <div class="mt-5 opacity-50" aria-hidden="true">
+              <%= render "mypage/manual_card_icon", icon: style[:icon] %>
+            </div>
+            <p class="mt-5 flex-1 text-sm leading-relaxed text-lp-dark-muted"><%= lp_texts[theme][:body] %></p>
+            <p class="mt-6 border-t border-white/10 pt-4 text-xs text-lp-dark-muted"><%= lp_texts[theme][:footer] %></p>
+          </div>
+        </li>
+      <% end %>
+      <li class="flex flex-col rounded-2xl border-2 border-dashed border-slate-400/35 p-7">
+        <p class="font-plex-mono text-xs font-medium text-lp-dark-muted">No.<%= format("%02d", MypageController::THEMES.size + 1) %></p>
+        <h3 class="mt-5 text-2xl font-black text-lp-dark-muted">？？？</h3>
+        <p class="mt-1 text-sm font-bold text-lp-dark-muted">近日公開予定</p>
+        <p class="mt-5 flex-1 text-sm leading-relaxed text-lp-dark-muted">用途に合わせたテーマを、今後も追加していきます。</p>
+        <p class="mt-6 border-t border-dashed border-slate-400/35 pt-4 font-plex-mono text-xs tracking-wider text-lp-dark-muted">COMING SOON</p>
+      </li>
+    </ul>
+  </div>
+</section>

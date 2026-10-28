@@ -1,0 +1,5 @@
+<% dark = local_assigns.fetch(:dark, false) %>
+<p class="font-plex-mono text-xs lg:text-sm font-medium tracking-wider <%= dark ? 'text-accent-pink' : 'text-accent-purple' %>">
+  <%= number %> <span class="ml-2 font-zen-kaku font-bold"><%= label %></span>
+</p>
+<h2 class="mt-3 text-[26px] lg:text-[40px] font-black leading-snug <%= dark ? 'text-white' : 'text-lp-ink' %>"><%= title %></h2>

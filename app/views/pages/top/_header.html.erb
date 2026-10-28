@@ -1,0 +1,16 @@
+<header class="mx-auto max-w-[1200px] px-5 lg:px-10 py-5 flex items-center justify-between">
+  <%= link_to "#top", aria: { label: "SETSU：Me トップへ" } do %>
+    <%= render "pages/top/logo" %>
+  <% end %>
+
+  <div class="flex items-center gap-8">
+    <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-lp-body">
+      <%= link_to "使い方", "#flow", class: "hover:text-accent-purple transition-colors" %>
+      <%= link_to "画面イメージ", "#sample", class: "hover:text-accent-purple transition-colors" %>
+      <%= link_to "テーマ", "#themes", class: "hover:text-accent-purple transition-colors" %>
+      <%= link_to "よくある質問", "#faq", class: "hover:text-accent-purple transition-colors" %>
+    </nav>
+    <%= link_to "はじめる", new_user_registration_path,
+      class: "rounded-full bg-lp-ink text-white text-sm font-bold px-5 py-2.5 hover:opacity-90 transition-opacity" %>
+  </div>
+</header>
