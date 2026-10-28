@@ -1,0 +1,23 @@
+<% steps = [
+  { title: "質問に答える", body: "性格や価値観、好きなことなどの質問に、選んだり書いたりして答えます。" },
+  { title: "AIが分析・文章化", body: "回答をまとめて分析し、あなたの特徴が伝わる文章に整えます。" },
+  { title: "トリセツが完成", body: "概要・仕様・推奨環境・注意事項・トラブル対処まで、5章立てで生成します。" },
+  { title: "URLで共有", body: "発行された共有URLを送るだけ。相手の登録やログインは要りません。" }
+] %>
+
+<section id="flow" class="bg-lp-bg bg-lp-grid bg-lp-grid-size">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-10 py-20 lg:py-28">
+    <%= render "pages/top/section_heading", number: "02", label: "使い方",
+      title: "4ステップで、トリセツ（取扱説明書）が完成します。" %>
+
+    <ol class="mt-10 lg:mt-14 grid lg:grid-cols-4 gap-4 lg:gap-6">
+      <% steps.each.with_index(1) do |step, i| %>
+        <li class="rounded-2xl border border-lp-line bg-white p-6 lg:p-7">
+          <p class="font-plex-mono text-2xl font-medium text-accent-purple"><%= format("%02d", i) %></p>
+          <h3 class="mt-4 text-lg font-bold text-lp-ink"><%= step[:title] %></h3>
+          <p class="mt-3 text-sm leading-relaxed text-lp-body"><%= step[:body] %></p>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>
