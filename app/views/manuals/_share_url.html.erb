@@ -1,6 +1,9 @@
 <% style = theme_card_style(manual.theme) %>
-<div class="mb-4" data-controller="copy-to-clipboard" data-copy-to-clipboard-copied-label-value="コピーしました">
-  <p class="text-sm font-semibold <%= style[:text] %> mb-2">共有URL</p>
+<div data-controller="copy-to-clipboard" data-copy-to-clipboard-copied-label-value="コピーしました">
+  <%# 見出しは本文の章バッジ（「第1章」など）と同じデザイン %>
+  <p class="mb-3 lg:mb-3.5">
+    <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r <%= style[:gradient] %> text-white">共有URL</span>
+  </p>
   <div class="flex gap-2">
     <input type="text" readonly value="<%= shared_manual_url(share_token: manual.share_token) %>"
         data-copy-to-clipboard-target="source"

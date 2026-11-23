@@ -1,7 +1,7 @@
 class ManualsController < ApplicationController
   include AnswerInputRestorable
 
-  layout "input", only: [ :step1, :step2, :step3, :show, :edit ]
+  layout "input", only: [ :step1, :step2, :step3, :show, :edit, :update, :regenerate ]
   before_action :set_theme, only: [ :step1, :step2, :step3, :step3_save, :edit, :update, :regenerate ]
 
   def step1

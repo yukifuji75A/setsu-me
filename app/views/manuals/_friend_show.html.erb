@@ -1,152 +1,153 @@
-<%# ヘッダー %>
-<div class="pt-8 pb-6">
-  <p class="text-xs text-gray-400 tracking-widest mb-1">トリセツ</p>
-  <h1 class="text-2xl font-bold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">
-    <%= @profile.name %>
-  </h1>
-  <p class="text-xs text-gray-600 mt-1 tracking-widest">ID：<%= manual_serial_number(@manual) %></p>
-  <div class="mt-3 h-px bg-gradient-to-r from-sky-400 to-blue-500 opacity-50"></div>
-</div>
-
-<div class="space-y-6 mb-8">
-
-  <%# 第1章 %>
+<% chapter_titles = manual_chapter_titles(@manual.theme) %>
+<div data-controller="toc" data-toc-active-class="font-bold <%= theme_card_style(@manual.theme)[:text] %>" data-toc-inactive-class="text-gray-700" class="lg:grid lg:grid-cols-[minmax(0,540px)_clamp(200px,22vw,280px)] lg:justify-center lg:gap-6 xl:gap-10 lg:items-start">
   <div>
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第1章</span>
-      <span class="text-sm font-semibold text-gray-900">こんな人です</span>
+    <%# ヘッダー %>
+    <div class="pt-8 pb-6 lg:pt-0 lg:pb-7">
+      <p class="text-xs text-gray-400 tracking-widest mb-1 lg:text-[13px] lg:tracking-[0.1em] lg:mb-1.5">トリセツ</p>
+      <h1 class="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">
+        <%= @profile.name %>
+      </h1>
+      <p class="text-xs text-gray-600 mt-1 tracking-widest lg:text-[13px] lg:tracking-[0.1em] lg:mt-1.5">ID：<%= manual_serial_number(@manual) %></p>
+      <div class="mt-3 lg:mt-4 h-px bg-gradient-to-r from-sky-400 to-blue-500 opacity-50"></div>
     </div>
-    <div class="bg-white border-2 border-sky-400 rounded-2xl p-4">
-      <p class="text-sm leading-relaxed text-gray-900"><%= @basic_spec&.ai_text %></p>
-    </div>
-  </div>
 
-  <%# 第2章 %>
-  <div>
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第2章</span>
-      <span class="text-sm font-semibold text-gray-900">プロフィール</span>
-    </div>
-    <div class="flex gap-3">
-      <%# プロフィール詳細カード %>
-      <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4">
-        <p class="text-sm text-gray-800 mb-4">プロフィール詳細</p>
-        <dl class="space-y-3 text-sm">
-          <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">誕生日</dt>
-            <dd class="text-gray-900 font-medium"><%= @profile.birthday.strftime("%-m月%-d日") %></dd>
-          </div>
-          <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">星座</dt>
-            <dd class="text-gray-900 font-medium"><%= @profile.zodiac_sign %></dd>
-          </div>
-          <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">血液型</dt>
-            <dd class="text-gray-900 font-medium"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
-          </div>
-          <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">出身地</dt>
-            <dd class="text-gray-900 font-medium"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
-          </div>
-          <div class="flex gap-2">
-            <dt class="w-16 text-gray-400 shrink-0">学歴</dt>
-            <dd class="text-gray-900 font-medium"><%= t("enums.profile.education.#{@profile.education}") %></dd>
-          </div>
-        </dl>
+    <div class="space-y-6 mb-8 lg:space-y-8 lg:mb-0">
+
+      <%# 第1章 %>
+      <div id="chapter-1" class="scroll-mt-12" data-toc-target="chapter">
+        <div class="flex items-center gap-2 mb-3 lg:gap-2.5 lg:mb-3.5">
+          <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第1章</span>
+          <span class="text-sm lg:text-lg font-semibold text-gray-900"><%= chapter_titles[0] %></span>
+        </div>
+        <div class="bg-white border-2 border-sky-400 rounded-2xl p-4 lg:p-5">
+          <p class="text-sm leading-relaxed text-gray-900 lg:text-base lg:leading-[1.75]"><%= @basic_spec&.ai_text %></p>
+        </div>
       </div>
-      <%# 特徴カード %>
-      <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4">
-        <p class="text-sm text-gray-800 mb-2">特徴</p>
-        <div class="flex flex-wrap gap-1.5">
-          <%# 性格ワード・MBTI・思考タイプ・行動タイプ・価値観・対人スタンスを表示 %>
-          <% [1, 2, 4, 5, 6, 7].each do |position| %>
-            <% answer = @common_answers.find { |a| a.question.position == position } %>
-            <% next unless answer %>
-            <% values = answer.question.selection? ? [answer.question_option&.label] : answer.body.to_s.split(/[、,，]/).map(&:strip) %>
-            <% values.compact_blank.each do |val| %>
-              <span class="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">
-                <%= val %>
-              </span>
+
+      <%# 第2章 %>
+      <div id="chapter-2" class="scroll-mt-12" data-toc-target="chapter">
+        <div class="flex items-center gap-2 mb-3 lg:gap-2.5 lg:mb-3.5">
+          <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第2章</span>
+          <span class="text-sm lg:text-lg font-semibold text-gray-900"><%= chapter_titles[1] %></span>
+        </div>
+        <div class="flex gap-3 lg:gap-3.5">
+          <%# プロフィール詳細カード %>
+          <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4 lg:p-[18px]">
+            <p class="text-sm text-gray-800 mb-4 lg:mb-2.5">プロフィール詳細</p>
+            <dl class="space-y-3 lg:space-y-2 text-sm">
+              <div class="flex gap-2">
+                <dt class="w-16 lg:w-[76px] text-gray-400 shrink-0">誕生日</dt>
+                <dd class="text-gray-900 font-medium"><%= @profile.birthday.strftime("%-m月%-d日") %></dd>
+              </div>
+              <div class="flex gap-2">
+                <dt class="w-16 lg:w-[76px] text-gray-400 shrink-0">星座</dt>
+                <dd class="text-gray-900 font-medium"><%= @profile.zodiac_sign %></dd>
+              </div>
+              <div class="flex gap-2">
+                <dt class="w-16 lg:w-[76px] text-gray-400 shrink-0">血液型</dt>
+                <dd class="text-gray-900 font-medium"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+              </div>
+              <div class="flex gap-2">
+                <dt class="w-16 lg:w-[76px] text-gray-400 shrink-0">出身地</dt>
+                <dd class="text-gray-900 font-medium"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
+              </div>
+              <div class="flex gap-2">
+                <dt class="w-16 lg:w-[76px] text-gray-400 shrink-0">学歴</dt>
+                <dd class="text-gray-900 font-medium"><%= t("enums.profile.education.#{@profile.education}") %></dd>
+              </div>
+            </dl>
+          </div>
+          <%# 特徴カード %>
+          <div class="flex-1 bg-white border-2 border-sky-400 rounded-2xl p-4 lg:p-[18px]">
+            <p class="text-sm text-gray-800 mb-2 lg:mb-2.5">特徴</p>
+            <div class="flex flex-wrap gap-1.5">
+              <%# 性格ワード・MBTI・思考タイプ・行動タイプ・価値観・対人スタンスを表示 %>
+              <% [1, 2, 4, 5, 6, 7].each do |position| %>
+                <% answer = @common_answers.find { |a| a.question.position == position } %>
+                <% next unless answer %>
+                <% values = answer.question.selection? ? [answer.question_option&.label] : answer.body.to_s.split(/[、,，]/).map(&:strip) %>
+                <% values.compact_blank.each do |val| %>
+                  <span class="text-xs lg:text-[13px] px-2 lg:px-2.5 py-1 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">
+                    <%= val %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# 第3章 %>
+      <div id="chapter-3" class="scroll-mt-12" data-toc-target="chapter">
+        <div class="flex items-center gap-2 mb-3 lg:gap-2.5 lg:mb-3.5">
+          <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第3章</span>
+          <span class="text-sm lg:text-lg font-semibold text-gray-900"><%= chapter_titles[2] %></span>
+        </div>
+        <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
+          <dl class="divide-y divide-sky-100 text-sm">
+            <% @theme_answers.select { |a| [1, 2, 3, 4, 5, 13, 14].include?(a.question.position) }.each do |answer| %>
+              <div class="flex gap-4 px-4 py-3 lg:px-5 lg:py-4">
+                <dt class="w-24 lg:w-[120px] shrink-0 text-gray-400 text-xs lg:text-sm pt-0.5"><%= answer.question.display_label %></dt>
+                <dd class="text-gray-900 text-xs lg:text-[15px] flex-1">
+                  <%= answer.question_option&.label %>
+                </dd>
+              </div>
             <% end %>
+          </dl>
+        </div>
+      </div>
+
+      <%# 第4章 %>
+      <div id="chapter-4" class="scroll-mt-12" data-toc-target="chapter">
+        <div class="flex items-center gap-2 mb-3 lg:gap-2.5 lg:mb-3.5">
+          <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第4章</span>
+          <span class="text-sm lg:text-lg font-semibold text-gray-900"><%= chapter_titles[3] %></span>
+        </div>
+        <div class="bg-white border-2 border-sky-400 rounded-2xl p-4 lg:p-5 space-y-4">
+          <% [
+            { emoji: "🍽️", label: "食べ物・飲み", positions: [7, 8] },
+            { emoji: "🎬", label: "エンタメ", positions: [9, 10] },
+            { emoji: "🏃", label: "アクティビティ", positions: [11, 12] },
+            { emoji: "🏠・🏕️", label: "インドア・アウトドア", positions: [6] }
+          ].each do |category| %>
+            <% values = @theme_answers.select { |a| category[:positions].include?(a.question.position) }.filter_map { |a| a.question_option&.label } %>
+            <% next if values.empty? %>
+            <div>
+              <p class="text-xs lg:text-sm text-gray-400 mb-2"><%= category[:emoji] %> <%= category[:label] %></p>
+              <div class="flex flex-wrap gap-2">
+                <% values.each do |val| %>
+                  <span class="text-xs lg:text-[13px] px-3 py-1.5 rounded-full bg-sky-50 text-sky-600 border border-sky-100">
+                    <%= val %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
           <% end %>
         </div>
       </div>
-    </div>
-  </div>
 
-  <%# 第3章 %>
-  <div>
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第3章</span>
-      <span class="text-sm font-semibold text-gray-900">人間関係・距離感</span>
-    </div>
-    <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
-      <dl class="divide-y divide-sky-100 text-sm">
-        <% @theme_answers.select { |a| [1, 2, 3, 4, 5, 13, 14].include?(a.question.position) }.each do |answer| %>
-          <div class="flex gap-4 px-4 py-3">
-            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
-            <dd class="text-gray-900 text-xs flex-1">
-              <%= answer.question_option&.label %>
-            </dd>
-          </div>
-        <% end %>
-      </dl>
-    </div>
-  </div>
-
-  <%# 第4章 %>
-  <div>
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第4章</span>
-      <span class="text-sm font-semibold text-gray-900">好きなもの・一緒に楽しめること</span>
-    </div>
-    <div class="bg-white border-2 border-sky-400 rounded-2xl p-4 space-y-4">
-      <% [
-        { emoji: "🍽️", label: "食べ物・飲み", positions: [7, 8] },
-        { emoji: "🎬", label: "エンタメ", positions: [9, 10] },
-        { emoji: "🏃", label: "アクティビティ", positions: [11, 12] },
-        { emoji: "🏠・🏕️", label: "インドア・アウトドア", positions: [6] }
-      ].each do |category| %>
-        <% values = @theme_answers.select { |a| category[:positions].include?(a.question.position) }.filter_map { |a| a.question_option&.label } %>
-        <% next if values.empty? %>
-        <div>
-          <p class="text-xs text-gray-400 mb-2"><%= category[:emoji] %> <%= category[:label] %></p>
-          <div class="flex flex-wrap gap-2">
-            <% values.each do |val| %>
-              <span class="text-xs px-3 py-1.5 rounded-full bg-sky-50 text-sky-600 border border-sky-100">
-                <%= val %>
-              </span>
-            <% end %>
-          </div>
+      <%# 第5章 %>
+      <div id="chapter-5" class="scroll-mt-12" data-toc-target="chapter">
+        <div class="flex items-center gap-2 mb-3 lg:gap-2.5 lg:mb-3.5">
+          <span class="text-xs lg:text-[13px] font-bold px-2 lg:px-3 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第5章</span>
+          <span class="text-sm lg:text-lg font-semibold text-gray-900"><%= chapter_titles[4] %></span>
         </div>
-      <% end %>
+        <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
+          <dl class="divide-y divide-sky-100 text-sm">
+            <% @theme_answers.select { |a| [15, 16, 17, 18].include?(a.question.position) }.each do |answer| %>
+              <div class="flex gap-4 px-4 py-3 lg:px-5 lg:py-4">
+                <dt class="w-24 lg:w-[120px] shrink-0 text-gray-400 text-xs lg:text-sm pt-0.5"><%= answer.question.display_label %></dt>
+                <dd class="text-gray-900 text-xs lg:text-[15px] flex-1">
+                  <%= answer.body %>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <%# 第5章 %>
-  <div>
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white">第5章</span>
-      <span class="text-sm font-semibold text-gray-900">友だちとの付き合い方</span>
-    </div>
-    <div class="bg-white border-2 border-sky-400 rounded-2xl overflow-hidden">
-      <dl class="divide-y divide-sky-100 text-sm">
-        <% @theme_answers.select { |a| [15, 16, 17, 18].include?(a.question.position) }.each do |answer| %>
-          <div class="flex gap-4 px-4 py-3">
-            <dt class="w-24 shrink-0 text-gray-400 text-xs pt-0.5"><%= answer.question.display_label %></dt>
-            <dd class="text-gray-900 text-xs flex-1">
-              <%= answer.body %>
-            </dd>
-          </div>
-        <% end %>
-      </dl>
-    </div>
-  </div>
-
+  <%= render "manuals/manual_aside", manual: @manual, show_footer_link: local_assigns.fetch(:show_footer_link, false) %>
 </div>
-
-<% if local_assigns.fetch(:show_footer_link, false) %>
-  <%= render "manuals/share_url", manual: @manual %>
-  <%= link_to "マイページへ", mypage_path,
-      class: "block w-full py-4 rounded-2xl font-bold text-sm text-center bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:opacity-90 transition-opacity" %>
-<% end %>

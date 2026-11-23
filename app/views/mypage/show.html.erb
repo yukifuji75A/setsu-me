@@ -1,15 +1,16 @@
 <%# ダーク背景 %>
+<% content_for :container_class, "lg:max-w-6xl min-[1340px]:pl-6" %>
 
 <%# プロフィールヘッダー %>
-<div class="pt-8 pb-6">
-  <div class="flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-purple to-accent-pink flex items-center justify-center text-xl font-bold text-white flex-shrink-0">
+<div class="pt-8 pb-6 lg:pt-0 lg:pb-7">
+  <div class="flex items-center gap-4 lg:gap-[18px]">
+    <div class="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-gradient-to-br from-accent-purple to-accent-pink flex items-center justify-center text-xl lg:text-[22px] font-bold text-white flex-shrink-0">
       <%= @profile.name.slice(0, 1) %>
     </div>
     <div class="flex-1 min-w-0">
-      <h1 class="text-lg font-bold truncate"><%= @profile.name %></h1>
+      <h1 class="text-lg lg:text-2xl font-bold truncate"><%= @profile.name %></h1>
     </div>
-    <details class="relative shrink-0 self-start" data-controller="dropdown">
+    <details class="relative shrink-0 self-start lg:hidden" data-controller="dropdown">
       <summary class="w-9 h-9 rounded-full flex items-center justify-center bg-dark-card hover:bg-accent-purple/20 cursor-pointer list-none transition-colors [&::-webkit-details-marker]:hidden">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-dark-muted">
           <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -35,16 +36,16 @@
 
 <%# タブ %>
 <div data-controller="tabs">
-  <div class="flex border-b border-dark-border mb-6">
+  <div class="flex border-b border-dark-border mb-6 lg:gap-8 lg:mb-7">
     <button
-      class="px-4 py-3 text-sm font-medium border-b-2 border-accent-purple text-white"
+      class="px-4 py-3 text-sm font-medium lg:px-0 lg:pt-0 lg:pb-3.5 lg:text-base border-b-2 border-accent-purple text-white"
       data-tabs-target="tab"
       data-tab-name="basic"
       data-action="click->tabs#switch">
       基本情報
     </button>
     <button
-      class="px-4 py-3 text-sm font-medium text-dark-muted border-b-2 border-transparent"
+      class="px-4 py-3 text-sm font-medium lg:px-0 lg:pt-0 lg:pb-3.5 lg:text-base text-dark-muted border-b-2 border-transparent"
       data-tabs-target="tab"
       data-tab-name="ai"
       data-action="click->tabs#switch">
@@ -54,130 +55,135 @@
 
   <%# 基本情報タブ %>
   <div data-tabs-target="panel" data-tab-name="basic">
-    <section class="mb-6">
-      <h2 class="text-xs text-white uppercase tracking-wider mb-3">トリセツ</h2>
-      <div class="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4 snap-x snap-mandatory" data-controller="carousel" data-carousel-count-value="<%= MypageController::THEMES.size + 1 %>">
-        <% MypageController::THEMES.each.with_index(1) do |theme, index| %>
-          <% style = theme_card_style(theme) %>
-          <% manual = @manuals_by_theme[theme] %>
-          <% answered_count = @answered_counts_by_theme[theme] %>
-          <div class="shrink-0 snap-start" data-carousel-target="card" data-controller="card-modal">
-            <button type="button"
-                class="block w-[150px] h-[210px] rounded-2xl text-left"
-                data-action="click->card-modal#open"
-                style="<% if manual %>background: <%= style[:border_gradient] %>; padding: 2px; box-shadow: <%= style[:glow_shadow] %>;<% else %>border: 2px dashed rgba(148,163,184,0.35); padding: 0;<% end %>">
-              <div class="w-full h-full rounded-[12px] p-3.5 flex flex-col" style="background: #171623;">
+    <%# panel の hidden 切り替えと競合しないよう、2カラムは内側の要素で組む %>
+    <div class="xl:grid xl:grid-cols-[auto_280px] xl:justify-start xl:gap-10 min-[1340px]:gap-14 xl:items-start">
+      <section class="mb-6 xl:mb-0">
+        <h2 class="text-xs text-white uppercase tracking-wider mb-3 lg:mb-3.5 lg:text-[13px] lg:text-dark-muted lg:normal-case lg:tracking-[0.05em]">トリセツ</h2>
+        <div class="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4 snap-x snap-mandatory lg:grid lg:grid-cols-[repeat(3,192px)] lg:gap-4 min-[1340px]:gap-6 lg:overflow-visible lg:mx-0 lg:px-0 lg:pb-0" data-controller="carousel" data-carousel-count-value="<%= MypageController::THEMES.size + 1 %>">
+          <% MypageController::THEMES.each.with_index(1) do |theme, index| %>
+            <% style = theme_card_style(theme) %>
+            <% manual = @manuals_by_theme[theme] %>
+            <% answered_count = @answered_counts_by_theme[theme] %>
+            <div class="shrink-0 snap-start" data-carousel-target="card" data-controller="card-modal">
+              <button type="button"
+                  class="block w-[150px] h-[210px] rounded-2xl lg:w-full lg:h-[280px] lg:rounded-[20px] text-left"
+                  data-action="click->card-modal#open"
+                  style="<% if manual %>background: <%= style[:border_gradient] %>; padding: 2px; box-shadow: <%= style[:glow_shadow] %>;<% else %>border: 2px dashed rgba(148,163,184,0.35); padding: 0;<% end %>">
+                <div class="w-full h-full rounded-[12px] p-3.5 lg:p-5 lg:rounded-[18px] flex flex-col" style="background: #171623;">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[9px] lg:text-[11px] tracking-[0.1em] <%= manual ? "text-white" : "text-[#8f8ba8]" %>">No.<%= format("%02d", index) %></span>
+                  </div>
+                  <div class="h-px my-2" style="background: #2c2a41;"></div>
+
+                  <% if manual %>
+                    <p class="text-lg lg:text-[22px] font-bold bg-clip-text text-transparent" style="background-image: <%= style[:title_gradient] %>;"><%= style[:title] %></p>
+                  <% else %>
+                    <p class="text-lg lg:text-[22px] font-bold text-[#8f8ba8]"><%= style[:title] %></p>
+                  <% end %>
+                  <p class="text-[11px] lg:text-sm mt-[5px] whitespace-nowrap overflow-hidden text-ellipsis <%= manual ? "text-white" : "text-[#8f8ba8]" %>"><%= style[:subtext] %></p>
+
+                  <div class="flex-1 flex items-start justify-center pt-2">
+                    <div style="opacity: <%= manual ? "0.5" : "0.30" %>;">
+                      <%= render "mypage/manual_card_icon", icon: style[:icon] %>
+                    </div>
+                  </div>
+
+                  <div class="h-px" style="background: #2c2a41; margin: 6px 0 10px;"></div>
+                  <div class="text-[9px] lg:text-[13px] leading-[1.6] <%= manual ? "text-white" : "text-[#8f8ba8]" %>">
+                    <% if manual %>
+                      <p>発行日 <%= manual.created_at.strftime("%Y.%m.%d") %></p>
+                      <p>全<%= answered_count %>項目</p>
+                    <% else %>
+                      <p>発行日 ---</p>
+                      <p>未作成</p>
+                    <% end %>
+                  </div>
+                </div>
+              </button>
+              <%= render "mypage/manual_card_modal", style: style, manual: manual, theme: theme %>
+            </div>
+          <% end %>
+          <div class="shrink-0 snap-start" data-carousel-target="card">
+            <div class="block w-[150px] h-[210px] rounded-2xl lg:w-full lg:h-[280px] lg:rounded-[20px] cursor-default" style="border: 2px dashed rgba(148,163,184,0.35); padding: 0;">
+              <div class="w-full h-full rounded-[12px] p-3.5 lg:p-5 lg:rounded-[18px] flex flex-col" style="background: #171623;">
                 <div class="flex items-center justify-between">
-                  <span class="text-[9px] tracking-[0.1em] <%= manual ? "text-white" : "text-[#8f8ba8]" %>">No.<%= format("%02d", index) %></span>
+                  <span class="text-[9px] lg:text-[11px] tracking-[0.1em] text-[#8f8ba8]">No.<%= format("%02d", MypageController::THEMES.size + 1) %></span>
+                  <svg viewBox="0 0 48 48" fill="none" stroke="#8f8ba8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <rect x="13" y="21" width="22" height="18" rx="2.5" />
+                    <path d="M17 21v-6a7 7 0 0 1 14 0v6" />
+                  </svg>
                 </div>
                 <div class="h-px my-2" style="background: #2c2a41;"></div>
 
-                <% if manual %>
-                  <p class="text-lg font-bold bg-clip-text text-transparent" style="background-image: <%= style[:title_gradient] %>;"><%= style[:title] %></p>
-                <% else %>
-                  <p class="text-lg font-bold text-[#8f8ba8]"><%= style[:title] %></p>
-                <% end %>
-                <p class="text-[11px] mt-[5px] whitespace-nowrap overflow-hidden text-ellipsis <%= manual ? "text-white" : "text-[#8f8ba8]" %>"><%= style[:subtext] %></p>
+                <p class="text-lg lg:text-[22px] font-bold text-[#8f8ba8]">？？？</p>
+                <p class="text-[11px] lg:text-sm mt-[5px] whitespace-nowrap overflow-hidden text-ellipsis text-[#8f8ba8]">近日公開予定</p>
 
                 <div class="flex-1 flex items-start justify-center pt-2">
-                  <div style="opacity: <%= manual ? "0.5" : "0.30" %>;">
-                    <%= render "mypage/manual_card_icon", icon: style[:icon] %>
+                  <div style="opacity: 0.30;">
+                    <%= render "mypage/manual_card_icon", icon: :lock %>
                   </div>
                 </div>
 
                 <div class="h-px" style="background: #2c2a41; margin: 6px 0 10px;"></div>
-                <div class="text-[9px] leading-[1.6] <%= manual ? "text-white" : "text-[#8f8ba8]" %>">
-                  <% if manual %>
-                    <p>発行日 <%= manual.created_at.strftime("%Y.%m.%d") %></p>
-                    <p>全<%= answered_count %>項目</p>
-                  <% else %>
-                    <p>発行日 ---</p>
-                    <p>未作成</p>
-                  <% end %>
+                <div class="flex justify-center">
+                  <span class="text-[9px] lg:text-[11px] tracking-[0.1em] px-3 py-1.5 rounded-full border border-dark-muted/40 text-[#8f8ba8]">COMING SOON</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center gap-1.5 mt-3 lg:hidden" data-carousel-target="dots"></div>
+      </section>
+
+      <aside class="lg:grid lg:grid-cols-2 lg:gap-5 lg:max-w-[608px] xl:flex xl:flex-col xl:max-w-none">
+        <section class="mb-6 lg:mb-0">
+          <h2 class="text-xs text-white uppercase tracking-wider mb-3 lg:text-[13px] lg:text-dark-muted lg:normal-case lg:tracking-[0.05em]">プロフィール</h2>
+          <div class="relative" data-controller="confirm-navigate" data-confirm-navigate-url-value="<%= edit_profile_path %>">
+            <button type="button"
+                class="w-full text-left bg-dark-card border border-dark-muted/20 rounded-2xl p-4 hover:border-accent-purple/40 transition-colors"
+                data-action="click->confirm-navigate#open">
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= @profile.age %>歳</span>
+                <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= @profile.zodiac_sign %></span>
+                <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></span>
+                <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.hometown.#{@profile.hometown}") %></span>
+                <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.education.#{@profile.education}") %></span>
               </div>
             </button>
-            <%= render "mypage/manual_card_modal", style: style, manual: manual, theme: theme %>
+            <%= render "shared/confirm_navigate_modal", message: "プロフィールを編集しますか？" %>
           </div>
-        <% end %>
-        <div class="shrink-0 snap-start" data-carousel-target="card">
-          <div class="block w-[150px] h-[210px] rounded-2xl cursor-default" style="border: 2px dashed rgba(148,163,184,0.35); padding: 0;">
-            <div class="w-full h-full rounded-[12px] p-3.5 flex flex-col" style="background: #171623;">
-              <div class="flex items-center justify-between">
-                <span class="text-[9px] tracking-[0.1em] text-[#8f8ba8]">No.<%= format("%02d", MypageController::THEMES.size + 1) %></span>
-                <svg viewBox="0 0 48 48" fill="none" stroke="#8f8ba8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                  <rect x="13" y="21" width="22" height="18" rx="2.5" />
-                  <path d="M17 21v-6a7 7 0 0 1 14 0v6" />
-                </svg>
-              </div>
-              <div class="h-px my-2" style="background: #2c2a41;"></div>
+        </section>
 
-              <p class="text-lg font-bold text-[#8f8ba8]">？？？</p>
-              <p class="text-[11px] mt-[5px] whitespace-nowrap overflow-hidden text-ellipsis text-[#8f8ba8]">近日公開予定</p>
-
-              <div class="flex-1 flex items-start justify-center pt-2">
-                <div style="opacity: 0.30;">
-                  <%= render "mypage/manual_card_icon", icon: :lock %>
+        <section class="mb-6 lg:mb-0">
+          <h2 class="text-xs text-white uppercase tracking-wider mb-3 lg:text-[13px] lg:text-dark-muted lg:normal-case lg:tracking-[0.05em]">共通情報</h2>
+          <% if @common_answers.any? %>
+            <div class="relative" data-controller="confirm-navigate" data-confirm-navigate-url-value="<%= edit_common_answers_path %>">
+              <button type="button"
+                  class="w-full text-left bg-dark-card border border-dark-muted/20 rounded-2xl p-4 hover:border-accent-purple/40 transition-colors"
+                  data-action="click->confirm-navigate#open">
+                <div class="flex flex-wrap gap-2">
+                  <% @common_answers.each do |answer| %>
+                    <% label = answer.question.selection? ? answer.question_option&.label : answer.body %>
+                    <span class="text-xs px-3 py-1.5 rounded-full border <%= common_tag_style(answer.question.display_label) %>"><%= label %></span>
+                  <% end %>
                 </div>
-              </div>
-
-              <div class="h-px" style="background: #2c2a41; margin: 6px 0 10px;"></div>
-              <div class="flex justify-center">
-                <span class="text-[9px] tracking-[0.1em] px-3 py-1.5 rounded-full border border-dark-muted/40 text-[#8f8ba8]">COMING SOON</span>
-              </div>
+              </button>
+              <%= render "shared/confirm_navigate_modal", message: "共通情報を編集しますか？" %>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-center gap-1.5 mt-3" data-carousel-target="dots"></div>
-    </section>
-
-    <section class="mb-6">
-      <h2 class="text-xs text-white uppercase tracking-wider mb-3">プロフィール</h2>
-      <div class="relative" data-controller="confirm-navigate" data-confirm-navigate-url-value="<%= edit_profile_path %>">
-        <button type="button"
-            class="w-full text-left bg-dark-card border border-dark-muted/20 rounded-2xl p-4 hover:border-accent-purple/40 transition-colors"
-            data-action="click->confirm-navigate#open">
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= @profile.age %>歳</span>
-            <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= @profile.zodiac_sign %></span>
-            <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></span>
-            <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.hometown.#{@profile.hometown}") %></span>
-            <span class="text-xs px-3 py-1.5 rounded-full border <%= profile_tag_style %>"><%= t("enums.profile.education.#{@profile.education}") %></span>
-          </div>
-        </button>
-        <%= render "shared/confirm_navigate_modal", message: "プロフィールを編集しますか？" %>
-      </div>
-    </section>
-
-    <section class="mb-6">
-      <h2 class="text-xs text-white uppercase tracking-wider mb-3">共通情報</h2>
-      <% if @common_answers.any? %>
-        <div class="relative" data-controller="confirm-navigate" data-confirm-navigate-url-value="<%= edit_common_answers_path %>">
-          <button type="button"
-              class="w-full text-left bg-dark-card border border-dark-muted/20 rounded-2xl p-4 hover:border-accent-purple/40 transition-colors"
-              data-action="click->confirm-navigate#open">
-            <div class="flex flex-wrap gap-2">
-              <% @common_answers.each do |answer| %>
-                <% label = answer.question.selection? ? answer.question_option&.label : answer.body %>
-                <span class="text-xs px-3 py-1.5 rounded-full border <%= common_tag_style(answer.question.display_label) %>"><%= label %></span>
-              <% end %>
-            </div>
-          </button>
-          <%= render "shared/confirm_navigate_modal", message: "共通情報を編集しますか？" %>
-        </div>
-      <% else %>
-        <%= link_to edit_common_answers_path, class: "block bg-dark-card border border-dark-muted/20 rounded-2xl p-4 text-sm text-dark-muted text-center" do %>
-          まだ回答していません。
-        <% end %>
-      <% end %>
-    </section>
+          <% else %>
+            <%= link_to edit_common_answers_path, class: "block bg-dark-card border border-dark-muted/20 rounded-2xl p-4 text-sm text-dark-muted text-center" do %>
+              まだ回答していません。
+            <% end %>
+          <% end %>
+        </section>
+      </aside>
+    </div>
   </div>
 
   <%# AI分析タブ %>
   <div data-tabs-target="panel" data-tab-name="ai" class="hidden">
     <% if @manual %>
-      <section class="mb-4">
+      <section class="mb-4 lg:max-w-3xl">
         <div class="bg-dark-card border border-dark-muted/20 rounded-2xl p-4">
           <p class="text-xs text-dark-muted mb-2">AI分析レポート</p>
           <p class="text-sm leading-relaxed whitespace-pre-line">
@@ -186,7 +192,7 @@
         </div>
       </section>
     <% else %>
-      <div class="text-center py-12">
+      <div class="text-center py-12 lg:max-w-3xl">
         <p class="text-dark-muted text-sm">基本情報タブからトリセツを作成してください。</p>
       </div>
     <% end %>

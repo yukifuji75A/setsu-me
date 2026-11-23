@@ -8,6 +8,14 @@ RSpec.describe "Manuals", type: :request do
     sign_in user
   end
 
+  # ブロック内のリクエストで描画されたレイアウトのファイルパスを返す
+  def rendered_layouts
+    layouts = []
+    callback = ->(event) { layouts << event.payload[:identifier] }
+    ActiveSupport::Notifications.subscribed(callback, "render_layout.action_view") { yield }
+    layouts
+  end
+
   describe "GET /manuals/step1" do
     context "共通情報が未入力の場合" do
       it "common-answersの入力画面にリダイレクトされること" do
@@ -33,6 +41,83 @@ RSpec.describe "Manuals", type: :request do
         get step1_manuals_path(theme: "friend")
 
         expect(response).to have_http_status(:ok)
+      end
+
+      it "ステップ表示で「回答入力」が現在のステップになること" do
+        get step1_manuals_path(theme: "default")
+
+        indicator = Nokogiri::HTML(response.body).at_css('nav[aria-label="作成ステップ"]')
+        expect(indicator.at_css('[aria-current="step"]').text).to include("回答入力")
+      end
+
+      it "質問カードに質問番号のidが付くこと" do
+        create(:question, theme: :default, answer_type: :text, position: 1)
+
+        get step1_manuals_path(theme: "default")
+
+        expect(Nokogiri::HTML(response.body).at_css("#question-1")).to be_present
+      end
+
+      it "回答状況パネルに質問へ移動するQ番号リンクが表示されること" do
+        create(:question, theme: :default, answer_type: :text, position: 1)
+
+        get step1_manuals_path(theme: "default")
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.text).to include("回答状況")
+        expect(html.at_css('a[href="#question-1"]')).to be_present
+      end
+
+      it "回答状況パネルのQ番号リンクはTurboを通さないこと（ページの取り直しで入力途中の回答が消えないようにするため）" do
+        create(:question, theme: :default, answer_type: :text, position: 1)
+
+        get step1_manuals_path(theme: "default")
+
+        expect(Nokogiri::HTML(response.body).at_css('a[href="#question-1"]')["data-turbo"]).to eq("false")
+      end
+
+      it "defaultテーマでは紫系の色で表示されること" do
+        create(:question, theme: :default, answer_type: :text, position: 1)
+
+        get step1_manuals_path(theme: "default")
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css("#question-1")["class"]).to include("border-violet-500")
+        expect(html.at_css('[data-controller~="answer-progress"]')["data-answer-progress-answered-class"]).to include("bg-accent-purple")
+      end
+
+      it "friendテーマでは質問カード・ステップ表示・回答状況・ボタンが水色系の色になること" do
+        create(:question, theme: :friend, answer_type: :text, position: 1)
+
+        get step1_manuals_path(theme: "friend")
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css("#question-1")["class"]).to include("border-sky-400")
+        expect(html.at_css("#question-1 textarea")["class"]).to include("focus:border-sky-500")
+        expect(html.at_css('nav[aria-label="作成ステップ"] [aria-current="step"]')["class"]).to include("text-sky-500")
+        expect(html.at_css('[data-controller~="answer-progress"]')["data-answer-progress-answered-class"]).to include("bg-sky-500")
+        expect(html.at_css('[data-answer-progress-target="bar"]')["class"]).to include("from-sky-400")
+        expect(html.at_css('input[type="submit"][value="次へ（AI生成へ）"]')["class"]).to include("from-sky-400")
+        expect(response.body).not_to include("border-violet-500")
+      end
+
+      context "サイドバーの「デフォルト」リンク" do
+        it "未発行の場合はstep1へのリンクになること" do
+          get step1_manuals_path(theme: "friend")
+
+          sidebar = Nokogiri::HTML(response.body).at_css('nav[aria-label="メインメニュー"]')
+          expect(sidebar.at_css("a[href='#{step1_manuals_path(theme: "default")}']").text).to include("デフォルト")
+        end
+
+        it "発行済みの場合は閲覧画面へのリンクになること" do
+          manual = create(:manual, :published, user: user, theme: :default)
+
+          get step1_manuals_path(theme: "friend")
+
+          sidebar = Nokogiri::HTML(response.body).at_css('nav[aria-label="メインメニュー"]')
+          expect(sidebar.at_css("a[href='#{manual_path(manual)}']").text).to include("デフォルト")
+          expect(sidebar.at_css("a[href='#{step1_manuals_path(theme: "default")}']")).to be_nil
+        end
       end
     end
   end
@@ -100,6 +185,23 @@ RSpec.describe "Manuals", type: :request do
         manual = user.manuals.find_by(theme: :friend)
         expect(manual.manual_ai_texts.find_by(section_type: :basic_spec).ai_text).to eq("製品概要の文章")
       end
+
+      it "ステップ表示で「AI生成」が現在のステップになること" do
+        get step2_manuals_path(theme: "default")
+
+        indicator = Nokogiri::HTML(response.body).at_css('nav[aria-label="作成ステップ"]')
+        expect(indicator.at_css('[aria-current="step"]').text).to include("AI生成")
+      end
+
+      it "friendテーマではカード・ステップ表示・ボタンが水色系の色になること" do
+        get step2_manuals_path(theme: "friend")
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css('nav[aria-label="作成ステップ"] [aria-current="step"]')["class"]).to include("text-sky-500")
+        expect(html.at_css(%(a[href="#{step3_manuals_path(theme: "friend")}"]))["class"]).to include("from-sky-400")
+        expect(response.body).to include("border-sky-400")
+        expect(response.body).not_to include("border-violet-500")
+      end
     end
 
     context "AI生成が失敗する場合" do
@@ -130,6 +232,13 @@ RSpec.describe "Manuals", type: :request do
 
         expect(response).to have_http_status(:ok)
       end
+
+      it "ステップ表示で「最終確認」が現在のステップになること" do
+        get step3_manuals_path(theme: "default")
+
+        indicator = Nokogiri::HTML(response.body).at_css('nav[aria-label="作成ステップ"]')
+        expect(indicator.at_css('[aria-current="step"]').text).to include("最終確認")
+      end
     end
 
     context "friendテーマでmanualが存在する場合" do
@@ -143,6 +252,16 @@ RSpec.describe "Manuals", type: :request do
         get step3_manuals_path(theme: "friend")
 
         expect(response).to have_http_status(:ok)
+      end
+
+      it "カード・ステップ表示・ボタンが水色系の色になること" do
+        get step3_manuals_path(theme: "friend")
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css('nav[aria-label="作成ステップ"] [aria-current="step"]')["class"]).to include("text-sky-500")
+        expect(html.at_css('input[type="submit"][value="トリセツを発行する"]')["class"]).to include("from-sky-400")
+        expect(html.at_xpath('//a[normalize-space()="戻る"]')["class"]).to include("border-sky-500")
+        expect(response.body).not_to include("border-violet-500")
       end
     end
   end
@@ -184,6 +303,34 @@ RSpec.describe "Manuals", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "ステップ表示が出ないこと" do
+      get edit_manuals_path(theme: "default")
+
+      expect(Nokogiri::HTML(response.body).at_css('nav[aria-label="作成ステップ"]')).to be_nil
+    end
+
+    it "回答状況パネルに質問へ移動するQ番号リンクが表示されること" do
+      create(:question, theme: :default, answer_type: :text, position: 1)
+
+      get edit_manuals_path(theme: "default")
+
+      html = Nokogiri::HTML(response.body)
+      expect(html.text).to include("回答状況")
+      expect(html.at_css('a[href="#question-1"]')).to be_present
+    end
+
+    it "friendテーマでは質問カード・回答状況・ボタンが水色系の色になること" do
+      create(:question, theme: :friend, answer_type: :text, position: 1)
+
+      get edit_manuals_path(theme: "friend")
+
+      html = Nokogiri::HTML(response.body)
+      expect(html.at_css("#question-1")["class"]).to include("border-sky-400")
+      expect(html.at_css('[data-controller~="answer-progress"]')["data-answer-progress-answered-class"]).to include("bg-sky-500")
+      expect(html.at_css('input[type="submit"][value="保存してマイページへ"]')["class"]).to include("from-sky-400")
+      expect(response.body).not_to include("border-violet-500")
+    end
   end
 
   describe "PATCH /manuals/edit" do
@@ -212,6 +359,14 @@ RSpec.describe "Manuals", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include("全ての質問に回答してください")
       end
+
+      it "editの通常表示と同じinputレイアウトで再描画されること" do
+        layouts = rendered_layouts do
+          patch edit_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "" } } }
+        end
+
+        expect(layouts).to contain_exactly(end_with("layouts/input.html.erb"))
+      end
     end
 
     context "friendテーマで全ての質問に回答している場合" do
@@ -228,6 +383,24 @@ RSpec.describe "Manuals", type: :request do
     end
   end
 
+  describe "PATCH /manuals/regenerate" do
+    let!(:default_question) { create(:question, theme: :default, answer_type: :text) }
+
+    before { create(:manual, :published, user: user, theme: :default) }
+
+    context "未回答の質問がある場合" do
+      it "unprocessable_entityで、editの通常表示と同じinputレイアウトで再描画されること" do
+        layouts = rendered_layouts do
+          patch regenerate_manuals_path(theme: "default"), params: { answers: { default_question.id.to_s => { body: "" } } }
+        end
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include("全ての質問に回答してください")
+        expect(layouts).to contain_exactly(end_with("layouts/input.html.erb"))
+      end
+    end
+  end
+
   describe "GET /manuals/:id" do
     context "自分のmanualを閲覧する場合" do
       it "200が返ること" do
@@ -237,6 +410,39 @@ RSpec.describe "Manuals", type: :request do
         get manual_path(manual)
 
         expect(response).to have_http_status(:ok)
+      end
+
+      it "目次に各章へのリンクが表示され、章にリンク先のidが付いていること" do
+        manual = create(:manual, :published, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get manual_path(manual)
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css('nav[aria-label="目次"] a[href="#chapter-1"]').text).to include("製品概要")
+        expect(html.at_css("#chapter-5")).to be_present
+      end
+
+      it "目次の現在位置ハイライト用に、章と目次リンクがtocコントローラーのターゲットになり、テーマ色が渡されること" do
+        manual = create(:manual, :published, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get manual_path(manual)
+
+        toc = Nokogiri::HTML(response.body).at_css('[data-controller="toc"]')
+        expect(toc["data-toc-active-class"]).to include("text-violet-600")
+        expect(toc.css('[data-toc-target="chapter"]').size).to eq(5)
+        expect(toc.css('nav[aria-label="目次"] a[data-toc-target="link"][data-action="click->toc#select"][data-turbo="false"]').size).to eq(5)
+      end
+
+      it "「編集する」リンクが表示されること" do
+        manual = create(:manual, :published, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get manual_path(manual)
+
+        link = Nokogiri::HTML(response.body).at_css(%(a[href="#{edit_manuals_path(theme: :default)}"]))
+        expect(link.text).to eq("編集する")
       end
     end
 
@@ -249,6 +455,17 @@ RSpec.describe "Manuals", type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("人間関係・距離感")
+      end
+
+      it "目次のハイライトにfriendテーマの色が渡されること" do
+        manual = create(:manual, :published, user: user, theme: :friend)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get manual_path(manual)
+
+        toc = Nokogiri::HTML(response.body).at_css('[data-controller="toc"]')
+        expect(toc["data-toc-active-class"]).to include("text-sky-500")
+        expect(toc.css('[data-toc-target="chapter"]').size).to eq(5)
       end
     end
 

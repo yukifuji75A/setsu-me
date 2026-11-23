@@ -29,6 +29,12 @@ module.exports = {
           'dark-muted': '#c4c7da',
           'dark-muted-2': '#a9a6c4',
         },
+        side: {
+          bg: '#0b0a12',
+          border: '#24223a',
+          label: '#6f6b88',
+          link: '#b9b5d0',
+        },
       },
       backgroundImage: {
         'lp-grid': 'linear-gradient(to right, rgba(124, 90, 240, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(124, 90, 240, 0.06) 1px, transparent 1px)',

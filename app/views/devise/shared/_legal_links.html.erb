@@ -1,0 +1,6 @@
+<%# PC のカード表示で、カードの外の下に出す規約リンク（SP はカード内のリンクを使う） %>
+<nav class="hidden lg:flex items-center gap-4 mt-6 text-sm text-lp-sub" aria-label="規約">
+  <%= link_to "利用規約", terms_path, class: "hover:text-accent-purple hover:underline" %>
+  <span class="text-lp-line-2" aria-hidden="true">|</span>
+  <%= link_to "プライバシーポリシー", privacy_path, class: "hover:text-accent-purple hover:underline" %>
+</nav>
