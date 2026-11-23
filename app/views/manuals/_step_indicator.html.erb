@@ -1,0 +1,17 @@
+<% style = theme_input_style(theme) %>
+<nav aria-label="作成ステップ" class="hidden lg:flex items-center gap-2.5 mb-7">
+  <% [ "回答入力", "AI生成", "最終確認" ].each.with_index(1) do |label, step| %>
+    <% if step > 1 %>
+      <span class="w-7 h-px bg-gray-300" aria-hidden="true"></span>
+    <% end %>
+    <% if step == current %>
+      <span class="inline-flex items-center gap-2 text-[13px] font-bold <%= style[:step_text] %>" aria-current="step">
+        <span class="w-[22px] h-[22px] rounded-full <%= style[:step_circle] %> text-white flex items-center justify-center text-xs"><%= step %></span><%= label %>
+      </span>
+    <% else %>
+      <span class="inline-flex items-center gap-2 text-[13px] text-gray-400">
+        <span class="w-[22px] h-[22px] rounded-full border border-gray-300 flex items-center justify-center text-xs"><%= step %></span><%= label %>
+      </span>
+    <% end %>
+  <% end %>
+</nav>

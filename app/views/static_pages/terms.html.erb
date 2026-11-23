@@ -1,6 +1,8 @@
+<% content_for :card_width, "lg:max-w-3xl" %>
+
 <div class="pt-9 pb-4">
-  <div class="mb-8">
-    <%= render "shared/back_to_mypage_link" %>
+  <div class="mb-8 <%= static_page_back_link_class %>">
+    <%= render "shared/back_to_mypage_link", path: static_page_back_path %>
   </div>
   <h1 class="text-xl font-bold mb-1">利用規約</h1>
 </div>
@@ -105,7 +107,7 @@
 
   <p class="text-gray-400">【制定日：2026年8月12日】</p>
 
-  <div class="pt-2">
-    <%= render "shared/back_to_mypage_link" %>
+  <div class="pt-2 <%= static_page_back_link_class %>">
+    <%= render "shared/back_to_mypage_link", path: static_page_back_path %>
   </div>
 </div>

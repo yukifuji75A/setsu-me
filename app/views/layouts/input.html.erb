@@ -18,25 +18,35 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-black min-h-screen flex justify-center">
+  <body class="min-h-screen flex justify-center bg-lp-bg bg-lp-grid bg-lp-grid-size <%= layout_body_class %>">
+    <%= render "shared/sidebar" if show_sidebar? %>
+
     <% if notice %>
-      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4">
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 <%= layout_flash_class %>">
         <div class="bg-violet-50 border border-violet-400 text-violet-700 text-sm rounded-xl px-4 py-3 text-center">
           <%= notice %>
         </div>
       </div>
     <% end %>
     <% if alert %>
-      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4">
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 <%= layout_flash_class %>">
         <div class="bg-red-50 border border-red-400 text-red-600 text-sm rounded-xl px-4 py-3 text-center">
           <%= alert %>
         </div>
       </div>
     <% end %>
 
-    <main class="w-full max-w-sm min-h-screen bg-white text-gray-900">
-      <div class="px-5 py-10">
-        <%= yield %>
+    <% if show_card_logo? %>
+      <%= link_to root_path, class: "block mb-6 lg:mb-8 transition-opacity hover:opacity-70", aria: { label: "トップページへ" } do %>
+        <%= render "pages/top/logo", reading: true, sub_text: "トップページへ" %>
+      <% end %>
+    <% end %>
+
+    <main class="w-full max-w-sm <%= layout_main_class %> bg-white text-gray-900">
+      <div class="<%= layout_content_class %>">
+        <div class="<%= layout_container_class %>">
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>

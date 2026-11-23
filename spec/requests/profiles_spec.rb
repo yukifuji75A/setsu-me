@@ -11,6 +11,24 @@ RSpec.describe "Profiles", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "サイドバーが表示されないこと" do
+      get new_profile_path
+
+      expect(response.body).not_to include('aria-label="メインメニュー"')
+    end
+
+    it "未変更時に送信ボタンを無効にする仕組み（form-dirty）が付かないこと" do
+      get new_profile_path
+
+      expect(Nokogiri::HTML(response.body).at_css('[data-controller~="form-dirty"]')).to be_nil
+    end
+
+    it "トップページへのロゴリンクが表示されないこと" do
+      get new_profile_path
+
+      expect(Nokogiri::HTML(response.body).at_css('a[aria-label="トップページへ"]')).to be_nil
+    end
   end
 
   describe "POST /profile" do
@@ -52,6 +70,20 @@ RSpec.describe "Profiles", type: :request do
       get edit_profile_path
 
       expect(response).to have_http_status(:ok)
+    end
+
+    it "サイドバーが表示されること" do
+      get edit_profile_path
+
+      expect(response.body).to include('aria-label="メインメニュー"')
+    end
+
+    it "更新ボタンが未変更時に無効になるよう form-dirty の対象になっていること" do
+      get edit_profile_path
+
+      html = Nokogiri::HTML(response.body)
+      expect(html.at_css('form[data-controller~="form-dirty"]')).to be_present
+      expect(html.at_css('input[type="submit"][data-form-dirty-target="submit"]')).to be_present
     end
   end
 

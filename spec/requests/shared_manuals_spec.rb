@@ -28,6 +28,39 @@ RSpec.describe "SharedManuals", type: :request do
         expect(response.body).not_to include("マイページへ")
       end
 
+      it "「編集する」リンクと共有URLが表示されず、目次は表示されること" do
+        manual = create(:manual, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get shared_manual_path(share_token: manual.share_token)
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css(%(a[href="#{edit_manuals_path(theme: :default)}"]))).to be_nil
+        expect(response.body).not_to include("共有URL")
+        expect(html.at_css('nav[aria-label="目次"] a[href="#chapter-1"]')).to be_present
+      end
+
+      it "目次の現在位置ハイライト用のtocコントローラーが付くこと" do
+        manual = create(:manual, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+
+        get shared_manual_path(share_token: manual.share_token)
+
+        toc = Nokogiri::HTML(response.body).at_css('[data-controller="toc"]')
+        expect(toc.css('[data-toc-target="chapter"]').size).to eq(5)
+        expect(toc.css('a[data-toc-target="link"][data-turbo="false"]').size).to eq(5)
+      end
+
+      it "ログイン状態で開いてもサイドバーが表示されないこと" do
+        manual = create(:manual, user: user, theme: :default)
+        create(:manual_ai_text, manual: manual, section_type: :basic_spec)
+        sign_in user
+
+        get shared_manual_path(share_token: manual.share_token)
+
+        expect(response.body).not_to include('aria-label="メインメニュー"')
+      end
+
       it "未ログイン状態でもアクセスできること" do
         manual = create(:manual, user: user, theme: :default)
         create(:manual_ai_text, manual: manual, section_type: :basic_spec)

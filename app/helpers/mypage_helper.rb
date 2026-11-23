@@ -26,6 +26,9 @@ module MypageHelper
       border_gradient: "linear-gradient(135deg, #9333ea, #c026d3)",
       glow_shadow: "0 0 18px -4px rgba(168,85,247,0.4), 0 0 28px -6px rgba(192,38,211,0.3)",
       title_gradient: "linear-gradient(135deg, #c084fc, #e879f9)",
+      border: "border-violet-500",
+      text: "text-violet-600",
+      gradient: "from-accent-purple to-accent-pink",
       icon: :document
     },
     "friend" => {
@@ -35,6 +38,9 @@ module MypageHelper
       border_gradient: "linear-gradient(135deg, #2563eb, #22d3ee)",
       glow_shadow: "0 0 18px -4px rgba(56,189,248,0.4), 0 0 28px -6px rgba(34,211,238,0.3)",
       title_gradient: "linear-gradient(135deg, #38bdf8, #22d3ee)",
+      border: "border-sky-400",
+      text: "text-sky-500",
+      gradient: "from-sky-400 to-blue-500",
       icon: :friends
     }
   }.freeze

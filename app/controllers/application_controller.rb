@@ -2,8 +2,13 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   before_action :authenticate_user!
   before_action :require_profile
+  helper_method :show_sidebar?
 
   private
+
+  def show_sidebar?
+    user_signed_in? && current_user.profile.present?
+  end
 
   def require_profile
     return unless user_signed_in?

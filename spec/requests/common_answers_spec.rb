@@ -20,6 +20,27 @@ RSpec.describe "CommonAnswers", type: :request do
 
         expect(response).to have_http_status(:ok)
       end
+
+      it "回答状況パネルに質問へ移動するQ番号リンクが表示されること" do
+        create(:question, theme: :common, answer_type: :text, position: 1)
+
+        get edit_common_answers_path
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css("#question-1")).to be_present
+        expect(html.text).to include("回答状況")
+        expect(html.at_css('a[href="#question-1"]')).to be_present
+        expect(html.at_css('a[href="#question-1"]')["data-turbo"]).to eq("false")
+      end
+
+      it "テーマがないため、回答状況パネルはdefaultテーマと同じ紫系の色になること" do
+        create(:question, theme: :common, answer_type: :text, position: 1)
+
+        get edit_common_answers_path
+
+        html = Nokogiri::HTML(response.body)
+        expect(html.at_css('[data-answer-progress-target="bar"]')["class"]).to include("from-accent-purple")
+      end
     end
   end
 

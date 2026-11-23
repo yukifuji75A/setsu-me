@@ -84,6 +84,33 @@ RSpec.describe "Accounts", type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it "エラーメッセージが日本語で表示されること" do
+        patch account_path, params: {
+          user: {
+            email: "old@example.com",
+            current_password: "wrong_password"
+          }
+        }
+
+        expect(response.body).to include("現在のパスワード が正しくありません")
+        expect(response.body).not_to include("Current password")
+      end
+    end
+
+    context "現在のパスワードが空欄の場合" do
+      it "エラーメッセージが日本語で表示されること" do
+        patch account_path, params: {
+          user: {
+            email: "new@example.com",
+            current_password: ""
+          }
+        }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include("現在のパスワード を入力してください")
+        expect(response.body).not_to include("Current password")
+      end
     end
 
     context "新しいメールアドレスの形式が不正の場合" do
