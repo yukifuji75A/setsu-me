@@ -76,6 +76,8 @@ ja:
           attributes:
             email:
               taken: "の入力内容を確認してください"
+            current_password:
+              invalid: "が正しくありません"
             password:
               too_short: "は%{count}文字以上で入力してください"
     models:
@@ -85,6 +87,7 @@ ja:
         email: "メールアドレス"
         password: "パスワード"
         password_confirmation: "パスワード（確認）"
+        current_password: "現在のパスワード"
       profile:
         name: "名前"
         birthday: "生年月日"

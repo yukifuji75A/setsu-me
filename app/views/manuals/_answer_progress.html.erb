@@ -1,0 +1,26 @@
+<%# 表示内容は answer-progress コントローラーが接続時・入力時に更新する。theme がない画面（共通情報）は default の色 %>
+<% style = theme_input_style(local_assigns[:theme]) %>
+<div class="hidden lg:block space-y-4 xl:space-y-6">
+  <div>
+    <div class="flex items-baseline justify-between mb-2 xl:mb-3">
+      <span class="text-[13px] xl:text-sm text-gray-400">回答状況</span>
+      <span class="text-[15px] xl:text-lg font-bold text-gray-900">
+        <span data-answer-progress-target="count">0</span><span class="text-xs font-normal text-gray-400"> / <%= questions.size %></span>
+      </span>
+    </div>
+    <div class="h-1.5 xl:h-2 rounded-full bg-gray-100 overflow-hidden">
+      <div class="h-full w-0 rounded-full bg-gradient-to-r <%= style[:gradient] %>" data-answer-progress-target="bar"></div>
+    </div>
+  </div>
+
+  <%# Turbo を通すとページを取り直して描き直し、入力途中の回答が消えるため、ブラウザのページ内移動にする %>
+  <div class="grid grid-cols-4 gap-2 xl:gap-2.5">
+    <% questions.each do |question| %>
+      <a href="#question-<%= question.position %>"
+          class="h-8 xl:h-12 rounded-lg xl:rounded-xl border border-gray-200 text-xs xl:text-sm text-gray-400 flex items-center justify-center"
+          aria-label="Q<%= question.position %>へ移動"
+          data-turbo="false"
+          data-answer-progress-target="cell"><%= question.position %></a>
+    <% end %>
+  </div>
+</div>

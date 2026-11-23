@@ -1,0 +1,52 @@
+<nav aria-label="メインメニュー" class="hidden lg:flex flex-col fixed inset-y-0 left-0 z-40 w-60 overflow-y-auto bg-side-bg border-r border-side-border text-white">
+  <div class="px-6 pt-8 pb-6">
+    <%= link_to mypage_path, class: "inline-block" do %>
+      <%= render "pages/top/logo", dark: true %>
+    <% end %>
+  </div>
+
+  <div class="flex-1 px-3 pb-6 space-y-6">
+    <div>
+      <%= sidebar_link_to "マイページ", mypage_path, active: sidebar_active?("mypage", "show") %>
+    </div>
+
+    <div>
+      <p class="px-3 mb-2 text-[11px] tracking-wider text-side-label">トリセツ</p>
+      <div class="space-y-1">
+        <% MypageController::THEMES.each do |theme| %>
+          <%= sidebar_link_to theme_card_style(theme)[:label], sidebar_manual_path(theme), active: sidebar_manual_active?(theme) %>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <p class="px-3 mb-2 text-[11px] tracking-wider text-side-label">登録情報</p>
+      <div class="space-y-1">
+        <%= sidebar_link_to "プロフィール", edit_profile_path, active: sidebar_active?("profiles", "edit", "update") %>
+        <%= sidebar_link_to "共通情報", edit_common_answers_path, active: sidebar_active?("common_answers", "edit", "update") %>
+      </div>
+    </div>
+
+    <div>
+      <p class="px-3 mb-2 text-[11px] tracking-wider text-side-label">その他</p>
+      <div class="space-y-1">
+        <% unless current_user.line_user? %>
+          <%= sidebar_link_to "アカウント設定", edit_account_path, active: sidebar_active?("accounts", "edit", "update") %>
+        <% end %>
+        <%= sidebar_link_to "利用規約", terms_path, active: sidebar_active?("static_pages", "terms") %>
+        <%= sidebar_link_to "プライバシーポリシー", privacy_path, active: sidebar_active?("static_pages", "privacy") %>
+        <%= button_to destroy_user_session_path, method: :delete,
+            class: "w-full text-left #{SidebarHelper::SIDEBAR_LINK_BASE_CLASS} text-[#f87171] hover:bg-white/5 cursor-pointer" do %>
+          <%= sidebar_link_dot(false) %>ログアウト
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-side-border px-6 py-5 flex items-center gap-3">
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-purple to-accent-pink flex items-center justify-center text-sm font-bold text-white shrink-0">
+      <%= current_user.profile.name.slice(0, 1) %>
+    </div>
+    <p class="text-sm font-medium truncate"><%= current_user.profile.name %></p>
+  </div>
+</nav>

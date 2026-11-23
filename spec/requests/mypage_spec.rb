@@ -22,6 +22,14 @@ RSpec.describe "Mypage", type: :request do
         expect(response.body).to include(edit_account_path)
       end
 
+      it "サイドバーが表示され、アカウント設定へのリンクが含まれること" do
+        get mypage_path
+
+        sidebar = Nokogiri::HTML(response.body).at_css('nav[aria-label="メインメニュー"]')
+        expect(sidebar).to be_present
+        expect(sidebar.at_css("a[href='#{edit_account_path}']")).to be_present
+      end
+
       context "トリセツが未作成の場合" do
         it "テーマごとに作るリンクが表示されること" do
           get mypage_path

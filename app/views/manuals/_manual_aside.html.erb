@@ -1,0 +1,23 @@
+<%# 目次（PCのみ）と、閲覧画面のフッター（共有URL・編集・マイページ）。PC では右パネルになる %>
+<% style = theme_card_style(manual.theme) %>
+<aside class="flex flex-col gap-4 xl:gap-5 lg:sticky lg:top-12">
+  <nav aria-label="目次" class="hidden lg:block border border-gray-200 rounded-2xl p-6 lg:p-5 xl:p-6">
+    <p class="text-[13px] text-gray-400 tracking-[0.1em] mb-5 lg:mb-4 xl:mb-5">目次</p>
+    <%# Turbo を通すとページを取り直して描き直し、toc コントローラーが覚えたクリック位置が消えるため、ブラウザのページ内移動にする %>
+    <ol class="space-y-4 lg:space-y-3 xl:space-y-4 text-sm xl:text-[15px]">
+      <% manual_chapter_titles(manual.theme).each.with_index(1) do |title, chapter| %>
+        <li>
+          <a href="#chapter-<%= chapter %>" class="text-gray-700 hover:opacity-70 transition-opacity" data-toc-target="link" data-action="click->toc#select" data-turbo="false">第<%= chapter %>章　<%= title %></a>
+        </li>
+      <% end %>
+    </ol>
+  </nav>
+
+  <% if show_footer_link %>
+    <%= render "manuals/share_url", manual: manual %>
+    <%= link_to "編集する", edit_manuals_path(theme: manual.theme),
+        class: "block w-full py-4 lg:py-3.5 xl:py-4 rounded-2xl border-2 #{style[:border]} #{style[:text]} bg-white font-bold text-sm xl:text-[15px] text-center hover:opacity-70 transition-opacity" %>
+    <%= link_to "マイページへ", mypage_path,
+        class: "block w-full py-4 lg:py-3.5 xl:py-4 rounded-2xl font-bold text-sm xl:text-[15px] text-center bg-gradient-to-r #{style[:gradient]} text-white hover:opacity-90 transition-opacity" %>
+  <% end %>
+</aside>

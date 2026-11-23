@@ -1,3 +1,4 @@
 <%# 白背景（inputレイアウト） %>
+<% content_for :container_class, "lg:max-w-6xl lg:mx-auto" %>
 
 <%= render partial: "manuals/#{@manual.theme}_show", locals: { show_footer_link: true } %>

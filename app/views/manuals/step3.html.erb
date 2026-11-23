@@ -1,60 +1,71 @@
-<div class="pt-8 pb-4">
-  <h1 class="text-xl font-bold mb-1">最終確認</h1>
-  <p class="text-sm text-gray-400">以下の内容でトリセツを発行します。</p>
+<% style = theme_input_style(@theme) %>
+<% content_for :container_class, "lg:max-w-6xl" %>
+<%= render "manuals/step_indicator", current: 3, theme: @theme %>
+
+<div class="pt-8 pb-4 lg:pt-0 lg:pb-6">
+  <h1 class="text-xl lg:text-2xl font-bold mb-1 lg:mb-1.5">最終確認</h1>
+  <p class="text-sm lg:text-[15px] text-gray-400">以下の内容でトリセツを発行します。</p>
 </div>
 
-<div class="space-y-4 mb-8">
+<% remaining = @manual&.remaining_generation_count %>
 
-  <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
-    <p class="text-xs text-gray-400 mb-3">プロフィール</p>
-    <dl class="space-y-2 text-sm">
-      <div class="flex gap-4">
-        <dt class="w-20 text-gray-400">製造年</dt>
-        <dd class="text-gray-900"><%= @profile.birthday.year %>年</dd>
-      </div>
-      <div class="flex gap-4">
-        <dt class="w-20 text-gray-400">製造地</dt>
-        <dd class="text-gray-900"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
-      </div>
-      <div class="flex gap-4">
-        <dt class="w-20 text-gray-400">モデル属性</dt>
-        <dd class="text-gray-900"><%= @profile.zodiac_sign %></dd>
-      </div>
-      <div class="flex gap-4">
-        <dt class="w-20 text-gray-400">内部規格</dt>
-        <dd class="text-gray-900"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
-      </div>
-      <div class="flex gap-4">
-        <dt class="w-20 text-gray-400">開発履歴</dt>
-        <dd class="text-gray-900"><%= t("enums.profile.education.#{@profile.education}") %></dd>
-      </div>
-    </dl>
-  </div>
+<%# PC ではカード2列の上に製品概要を置き、発行・戻るボタンの右列（左余白16px＋幅280px）はカードの2段目に置き、画面下端に追従させる %>
+<div class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_296px] lg:gap-4 lg:items-start">
 
-  <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
-    <p class="text-xs text-gray-400 mb-3">共通情報</p>
-    <dl class="space-y-3 text-sm">
-      <% @common_answers.each do |answer| %>
-        <div>
-          <dt class="text-gray-400 text-xs mb-0.5"><%= answer.question.display_label %></dt>
-          <dd class="text-gray-900">
-            <% if answer.question.selection? %>
-              <%= answer.question_option&.label %>
-            <% else %>
-              <%= answer.body %>
-            <% end %>
-          </dd>
+  <%# PC では左列にプロフィールと共通情報を積み、右列の追加情報と高さを釣り合わせる %>
+  <div class="space-y-4 lg:col-start-1 lg:row-start-2">
+    <div class="bg-white border-2 <%= style[:card_border] %> rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-3">プロフィール</p>
+      <dl class="space-y-2 text-sm">
+        <div class="flex gap-4">
+          <dt class="w-20 text-gray-400">製造年</dt>
+          <dd class="text-gray-900"><%= @profile.birthday.year %>年</dd>
         </div>
-      <% end %>
-    </dl>
+        <div class="flex gap-4">
+          <dt class="w-20 text-gray-400">製造地</dt>
+          <dd class="text-gray-900"><%= t("enums.profile.hometown.#{@profile.hometown}") %></dd>
+        </div>
+        <div class="flex gap-4">
+          <dt class="w-20 text-gray-400">モデル属性</dt>
+          <dd class="text-gray-900"><%= @profile.zodiac_sign %></dd>
+        </div>
+        <div class="flex gap-4">
+          <dt class="w-20 text-gray-400">内部規格</dt>
+          <dd class="text-gray-900"><%= t("enums.profile.blood_type.#{@profile.blood_type}") %></dd>
+        </div>
+        <div class="flex gap-4">
+          <dt class="w-20 text-gray-400">開発履歴</dt>
+          <dd class="text-gray-900"><%= t("enums.profile.education.#{@profile.education}") %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="bg-white border-2 <%= style[:card_border] %> rounded-2xl p-4">
+      <p class="text-xs text-gray-400 mb-3">共通情報</p>
+      <dl class="space-y-3 text-sm">
+        <% @common_answers.each do |answer| %>
+          <div>
+            <dt class="text-gray-400 text-xs mb-0.5"><%= answer.question.display_label %></dt>
+            <dd class="text-gray-900">
+              <% if answer.question.selection? %>
+                <%= answer.question_option&.label %>
+              <% else %>
+                <%= answer.body %>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
   </div>
 
-  <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+  <%# PC では製品概要をカード2列の上に表示する（SP は HTML の並び順のまま） %>
+  <div class="bg-white border-2 <%= style[:card_border] %> rounded-2xl p-4 lg:col-start-1 lg:row-start-1 lg:col-span-2">
     <p class="text-xs text-gray-400 mb-2">製品概要</p>
     <p class="text-sm leading-relaxed text-gray-900"><%= @basic_spec&.ai_text %></p>
   </div>
 
-  <div class="bg-white border-2 border-violet-500 rounded-2xl p-4">
+  <div class="bg-white border-2 <%= style[:card_border] %> rounded-2xl p-4 lg:col-start-2 lg:row-start-2">
     <p class="text-xs text-gray-400 mb-3">追加情報</p>
     <dl class="space-y-3 text-sm">
       <% @theme_answers.each do |answer| %>
@@ -72,24 +83,21 @@
     </dl>
   </div>
 
+  <%= form_with url: step3_manuals_path(theme: @theme), method: :post, class: "pt-4 lg:pt-0 lg:ml-4 lg:col-start-3 lg:row-start-2 lg:self-end lg:sticky lg:bottom-8" do |f| %>
+    <div class="space-y-3">
+      <%= f.submit "トリセツを発行する",
+          class: "w-full py-4 rounded-2xl font-bold text-white text-sm cursor-pointer bg-gradient-to-r #{style[:gradient]} hover:opacity-90 transition-opacity" %>
+      <% if remaining.nil? || remaining.positive? %>
+        <div>
+          <%= link_to "戻る", step1_manuals_path(theme: @theme),
+              class: "block w-full py-4 rounded-2xl font-bold text-sm text-center border-2 #{style[:outline_button]} transition-colors" %>
+          <% if remaining %>
+            <p class="text-xs text-gray-400 text-center mt-2">
+              ※戻って回答を修正すると文章を再生成することができます。（あと<%= remaining %>回まで）
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>
-
-<% remaining = @manual&.remaining_generation_count %>
-
-<%= form_with url: step3_manuals_path(theme: @theme), method: :post do |f| %>
-  <div class="space-y-3">
-    <%= f.submit "トリセツを発行する",
-        class: "w-full py-4 rounded-2xl font-bold text-white text-sm cursor-pointer bg-gradient-to-r from-accent-purple to-accent-pink hover:opacity-90 transition-opacity" %>
-    <% if remaining.nil? || remaining.positive? %>
-      <div>
-        <%= link_to "戻る", step1_manuals_path(theme: @theme),
-            class: "block w-full py-4 rounded-2xl font-bold text-sm text-center border-2 border-violet-500 text-violet-500 hover:bg-violet-50 transition-colors" %>
-        <% if remaining %>
-          <p class="text-xs text-gray-400 text-center mt-2">
-            ※戻って回答を修正すると文章を再生成することができます。（あと<%= remaining %>回まで）
-          </p>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-<% end %>

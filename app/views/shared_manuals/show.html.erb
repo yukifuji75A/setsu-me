@@ -1,3 +1,6 @@
 <%# 白背景（inputレイアウト） %>
+<% content_for :container_class, "lg:max-w-6xl lg:mx-auto" %>
+<%# サイドバーなしでも幅広で表示する %>
+<% content_for :wide_layout, true %>
 
 <%= render partial: "manuals/#{@manual.theme}_show", locals: { show_footer_link: false } %>
